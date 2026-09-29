@@ -1,0 +1,17 @@
+{
+  "name": "astra-26",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ASTRA '26 (Kshitiz) - Gaya College of Engineering Fresher's Party Portal",
+  "type": "module",
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "build": "npm --prefix client install && npm --prefix client run build",
+    "start": "npm --prefix server start",
+    "server": "npm --prefix server run dev",
+    "client": "npm --prefix client run dev"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
