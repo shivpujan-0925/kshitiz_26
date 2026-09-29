@@ -58,6 +58,9 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+// Trust reverse proxy (Render, Heroku, Cloudflare) for accurate client IP detection & rate limiting
+app.set('trust proxy', 1);
+
 // Disable X-Powered-By header to obscure server technology
 app.disable('x-powered-by');
 
@@ -78,35 +81,51 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false
 }));
 
-// Robust CORS with configurable allowed origins
-const allowedOrigins = [
+// Robust CORS with configurable allowed origins and automatic cloud platform support
+const configuredOrigins = [
   process.env.FRONTEND_URL,
   ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map(s => s.trim()) : [])
-].filter(Boolean);
+]
+  .filter(Boolean)
+  .map(url => url.replace(/\/$/, '').toLowerCase());
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow non-browser requests (curl, postman, server-to-server)
+    // 1. Allow non-browser requests (curl, postman, server-to-server, mobile native)
     if (!origin) return callback(null, true);
     
-    // In local development, permit localhost and 127.0.0.1
-    if (!IS_PROD) {
-      if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
-        return callback(null, true);
-      }
-    }
-    
-    // Check against configured allowed origins
-    if (allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+    const normalized = origin.replace(/\/$/, '').toLowerCase();
+
+    // 2. Always allow localhost and 127.0.0.1 on any port (for local dev & admin testing against deployed API)
+    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(normalized)) {
       return callback(null, true);
     }
-    
-    return callback(new Error('CORS request blocked by security policy'));
+
+    // 3. Automatically permit standard web hosting platforms (Vercel, Render, Netlify, GitHub Pages)
+    if (
+      /\.vercel\.app$/.test(normalized) ||
+      /\.onrender\.com$/.test(normalized) ||
+      /\.netlify\.app$/.test(normalized) ||
+      /\.github\.io$/.test(normalized)
+    ) {
+      return callback(null, true);
+    }
+
+    // 4. Check against explicitly configured allowed origins (or if wildcard is present or none defined)
+    if (configuredOrigins.length === 0 || configuredOrigins.includes('*') || configuredOrigins.includes(normalized)) {
+      return callback(null, true);
+    }
+
+    // 5. If not allowed, respond cleanly with false (prevents 500 unhandled errors from breaking preflight)
+    return callback(null, false);
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   credentials: true
 }));
+
+// Explicit preflight handler for all routes
+app.options('*', cors());
 
 // Body size limits (Strict 2MB limit to prevent Denial of Service via large payloads)
 app.use(express.json({ limit: '2mb' }));
