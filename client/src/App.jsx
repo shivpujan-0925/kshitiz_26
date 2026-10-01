@@ -137,7 +137,7 @@ function App() {
       <footer className="relative z-10 border-t border-white/10 py-12 px-4 text-center pb-28">
         <div className="max-w-4xl mx-auto space-y-4">
           <div className="flex items-center justify-center gap-2">
-            <span className="text-xl font-brand font-extrabold text-gradient-cosmic">KSHITIZ '26</span>
+            <span className="text-xl font-brand font-extrabold text-gradient-cosmic">KSHITIZ '25</span>
             <span className="text-slate-500">•</span>
             <span className="text-xs font-semibold text-slate-400">Gaya College of Engineering, Gaya</span>
           </div>

@@ -42,7 +42,7 @@ const defaultScheduleEvents = [
     title: 'Senior Inaugural Dance: "Horizon Awakening"',
     category: 'Dance',
     venue: 'Main Stage',
-    description: 'A breathtaking high-energy fusion choreography by 2nd-year seniors to officially ignite the Kshitiz \'26 stage.',
+    description: 'A breathtaking high-energy fusion choreography by 2nd-year seniors to officially ignite the Kshitiz \'25 stage.',
     icon: Flame,
     highlight: true
   },
@@ -157,7 +157,7 @@ const ScheduleSection = ({ schedule }) => {
       'CALSCALE:GREGORIAN',
       'METHOD:PUBLISH',
       'BEGIN:VEVENT',
-      'SUMMARY:Kshitiz \'26 - Gaya College of Engineering Annual Fresher Conclave',
+      'SUMMARY:Kshitiz \'25 - Gaya College of Engineering Annual Fresher Conclave',
       'DESCRIPTION:The Grand Annual Fresher Party welcoming Batch 2025-2029 organized by Batch 2024-2028 at Gaya College of Engineering.',
       'LOCATION:Academic campus, GCE, Gaya, Bihar',
       'DTSTART:20261008T113000Z',
@@ -188,7 +188,7 @@ const ScheduleSection = ({ schedule }) => {
             Official Event Timeline
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-white font-heading tracking-tight">
-            Schedule of Kshitiz '26
+            Schedule of Kshitiz '25
           </h2>
           <p className="text-slate-400 text-sm sm:text-base md:text-lg mt-2 max-w-xl">
             From the grand red carpet inauguration to the starlight DJ night — plan your evening so you don't miss a single beat!

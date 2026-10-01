@@ -653,7 +653,7 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white">Kshitiz '26 Admin Cockpit</h3>
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white">Kshitiz '25 Admin Cockpit</h3>
                 <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
                   Batch 2024–28 Committee
                 </span>

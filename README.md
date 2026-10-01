@@ -1,4 +1,4 @@
-# 🌌 KSHITIZ '26 — System Architecture & Production Operations Runbook
+# 🌌 KSHITIZ '25 — System Architecture & Production Operations Runbook
 
 > **Confidential & Proprietary** — Internal Engineering & Operations Documentation  
 > **Event**: Annual Fresher Conclave, Gaya College of Engineering (GCE Gaya)  
@@ -30,7 +30,7 @@
 
 ## 1. Executive Product Overview
 
-**KSHITIZ '26** is the official web application and event operations system powering the flagship induction conclave for the Gaya College of Engineering. 
+**KSHITIZ '25** is the official web application and event operations system powering the flagship induction conclave for the Gaya College of Engineering. 
 
 Designed for high-throughput concurrency during peak campus registration and live stage events, the platform provides:
 - Instant digital holographic pass generation with scannable roll-coded identifiers.

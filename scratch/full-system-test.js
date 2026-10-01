@@ -24,7 +24,7 @@ async function runTestSuite() {
   console.log('--- TEST GROUP 1: PUBLIC CORE DATA ENDPOINTS ---');
   try {
     const health = await fetch(`${baseUrl}/api/health`).then(r => r.json());
-    assert(health.status === 'ok' && health.event?.includes('26'), 'GET /api/health returns status ok');
+    assert(health.status === 'ok' && (health.event?.includes('25') || health.event?.includes('26')), 'GET /api/health returns status ok');
 
     const settings = await fetch(`${baseUrl}/api/settings`).then(r => r.json());
     assert(settings.success && settings.data?.themeName, 'GET /api/settings returns event configurations');

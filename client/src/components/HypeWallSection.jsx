@@ -189,7 +189,7 @@ const HypeWallSection = () => {
             Fresher Hype & Shoutout Wall
           </h2>
           <p className="text-slate-400 text-sm sm:text-base md:text-lg mt-2 max-w-xl">
-            Drop a message for your batchmates, cheer for your department performers, or share your excitement for Kshitiz '26!
+            Drop a message for your batchmates, cheer for your department performers, or share your excitement for Kshitiz '25!
           </p>
         </div>
 

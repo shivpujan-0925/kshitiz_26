@@ -106,7 +106,7 @@ const HeroSection = ({ settings, onRegisterClick, onLookupClick, posters }) => {
         <span className="text-slate-300 hidden sm:inline">Organized by Batch 2024–28</span>
       </div>
 
-      {/* Main Title Typography: KSHITIZ '26 */}
+      {/* Main Title Typography: KSHITIZ '25 */}
       <div className="relative max-w-5xl w-full mx-auto mb-3 sm:mb-4 px-2">
         <div className="inline-block relative max-w-full">
           <h1 className="text-[2.6rem] min-[360px]:text-[3.1rem] min-[420px]:text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight font-brand uppercase leading-none select-none flex flex-wrap items-center justify-center">
@@ -114,7 +114,7 @@ const HeroSection = ({ settings, onRegisterClick, onLookupClick, posters }) => {
               KSHITIZ
             </span>
             <span className="text-white font-light ml-2 sm:ml-3 text-[2.2rem] min-[360px]:text-[2.6rem] min-[420px]:text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-gradient-gold">
-              '26
+              '25
             </span>
           </h1>
           <div className="absolute -top-4 -right-6 hidden sm:flex items-center gap-1 px-3 py-1 rounded-full bg-pink-500/20 border border-pink-500/40 text-pink-300 text-xs font-bold tracking-wider shadow-lg">

@@ -34,7 +34,7 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
   const role = participant?.role || 'Participant / Performer';
   const acts = participant?.acts || 'Mr. & Miss Kshitiz Ramp Walk';
   const phone = participant?.phone || '+91 98765 XXXXX';
-  const passId = `KSHITIZ-26-${roll.toUpperCase()}`;
+  const passId = `KSHITIZ-25-${roll.toUpperCase()}`;
 
   // Generate SVG QR Code pattern deterministically based on roll number
   const generateQrPattern = () => {
@@ -173,10 +173,10 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
     ctx.textAlign = 'center';
     ctx.fillText('★ OFFICIAL ENTRY CREDENTIAL ★', width / 2, 183);
 
-    // Main KSHITIZ '26 text
+    // Main KSHITIZ '25 text
     ctx.font = '900 68px Outfit, sans-serif';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText("KSHITIZ '26", width / 2, 265);
+    ctx.fillText("KSHITIZ '25", width / 2, 265);
 
     ctx.font = '500 17px "Plus Jakarta Sans", sans-serif';
     ctx.fillStyle = '#c084fc';
@@ -389,8 +389,8 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: `Kshitiz '26 Entry Pass - ${name}`,
-        text: `Here is my official entry pass for Kshitiz '26 at Gaya College of Engineering! Roll: ${roll}`,
+        title: `Kshitiz '25 Entry Pass - ${name}`,
+        text: `Here is my official entry pass for Kshitiz '25 at Gaya College of Engineering! Roll: ${roll}`,
         url: window.location.href,
       }).catch(() => {});
     } else {
@@ -450,7 +450,7 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
               </div>
               <h3 className="text-2xl sm:text-4xl font-black font-brand tracking-wider text-white">
                 <span className="text-gradient-cosmic">KSHITIZ</span>{' '}
-                <span className="text-gradient-gold font-light">'26</span>
+                <span className="text-gradient-gold font-light">'25</span>
               </h3>
               <p className="text-[11px] text-purple-300 font-medium tracking-wide">
                 Beyond The Horizon • Celestial Awakening

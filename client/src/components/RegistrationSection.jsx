@@ -103,7 +103,7 @@ const RegistrationSection = ({ onRegisterSuccess }) => {
 
         setStatusMsg({
           type: 'success',
-          text: `🎉 Welcome ${formData.fullName}! Your VIP Fresher Entry Pass for KSHITIZ 2026 is confirmed. Check out your generated pass below!`
+          text: `🎉 Welcome ${formData.fullName}! Your VIP Fresher Entry Pass for KSHITIZ '25 is confirmed. Check out your generated pass below!`
         });
 
         setConfirmedParticipant(data.data);
@@ -163,7 +163,7 @@ const RegistrationSection = ({ onRegisterSuccess }) => {
           Official Fresher Registration & VIP Pass Hub
         </div>
         <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight font-heading">
-          Register for Kshitiz '26
+          Register for Kshitiz '25
         </h2>
         <p className="text-slate-400 text-sm sm:text-base mt-2">
           Batch 2025–2029 • Claim your entry pass, choose your stage act, and get instant access to the grand fresher celebration!
@@ -363,7 +363,7 @@ const RegistrationSection = ({ onRegisterSuccess }) => {
                 ) : (
                   <>
                     <Send className="w-5 h-5" />
-                    <span>Submit & Claim Kshitiz '26 Pass</span>
+                    <span>Submit & Claim Kshitiz '25 Pass</span>
                   </>
                 )}
               </button>
@@ -409,7 +409,7 @@ const RegistrationSection = ({ onRegisterSuccess }) => {
               <span>Retrieve Registered Entry Pass</span>
             </h3>
             <p className="text-xs sm:text-sm text-slate-400 mb-6">
-              Already submitted your form? Enter your College Roll Number to fetch and view your confirmed Kshitiz '26 VIP pass.
+              Already submitted your form? Enter your College Roll Number to fetch and view your confirmed Kshitiz '25 VIP pass.
             </p>
 
             <form onSubmit={handleLookup} className="flex gap-2 mb-4">
