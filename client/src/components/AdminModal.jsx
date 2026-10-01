@@ -282,7 +282,7 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
     const a = document.createElement('a');
     a.setAttribute('href', url);
     const roleSuffix = filterRole !== 'All' ? `_${filterRole}` : '';
-    a.setAttribute('download', `Kshitiz_2026_Participants${roleSuffix}_${Date.now()}.csv`);
+    a.setAttribute('download', `Kshitiz_2025_Participants${roleSuffix}_${Date.now()}.csv`);
     a.click();
   };
 
@@ -1342,7 +1342,7 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
                         <input
                           type="text"
                           required
-                          placeholder="Poster Title (e.g. Kshitiz 2026 Genesis Poster)"
+                          placeholder="Poster Title (e.g. Kshitiz 2025 Genesis Poster)"
                           value={posterTitle}
                           onChange={(e) => setPosterTitle(e.target.value)}
                           className="glass-input px-3.5 py-2.5 rounded-xl text-white text-xs"
@@ -1533,7 +1533,7 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
                       
                       {/* Mr. Fresher */}
                       <div className="p-4 sm:p-5 rounded-2xl bg-amber-950/20 border border-amber-500/30 space-y-3.5">
-                        <span className="text-xs font-bold uppercase text-amber-400 tracking-wider">Mr. Kshitiz 2026 Profile</span>
+                        <span className="text-xs font-bold uppercase text-amber-400 tracking-wider">Mr. Kshitiz 2025 Profile</span>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                           <input
                             type="text"
@@ -1593,7 +1593,7 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
 
                       {/* Miss Fresher */}
                       <div className="p-4 sm:p-5 rounded-2xl bg-pink-950/20 border border-pink-500/30 space-y-3.5">
-                        <span className="text-xs font-bold uppercase text-pink-400 tracking-wider">Miss Kshitiz 2026 Profile</span>
+                        <span className="text-xs font-bold uppercase text-pink-400 tracking-wider">Miss Kshitiz 2025 Profile</span>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                           <input
                             type="text"

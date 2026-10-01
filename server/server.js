@@ -227,7 +227,7 @@ const inMemoryStore = {
   announcements: [
     {
       _id: 'a-1',
-      title: '🚀 KSHITIZ 2026 Registration Gates Open!',
+      title: '🚀 KSHITIZ 2025 Registration Gates Open!',
       content: 'Senior batch 2024-28 proudly welcomes the incoming trailblazers of Batch 2025-29 to Kshitiz \'25 at Gaya College of Engineering. Register your acts, claim your VIP entry pass, and prepare for an unforgettable night!',
       tag: 'Urgent',
       createdAt: new Date().toISOString()
@@ -241,7 +241,7 @@ const inMemoryStore = {
     },
     {
       _id: 'a-3',
-      title: '👑 Mr. & Miss Kshitiz 2026 Nominations Active',
+      title: '👑 Mr. & Miss Kshitiz 2025 Nominations Active',
       content: 'Walk the ramp, showcase your charisma and intellectual presence! The crowning ceremony takes place at 09:00 PM on the main stage.',
       tag: 'Royalty',
       createdAt: new Date(Date.now() - 7200 * 1000).toISOString()
@@ -253,7 +253,7 @@ const inMemoryStore = {
       registrationNumber: 'GCE-2025-XX',
       branch: 'Grand Finale Stage Reveal',
       imageUrl: '/mr_fresher_card.jpg',
-      titleBadge: 'Mr. Kshitiz 2026',
+      titleBadge: 'Mr. Kshitiz 2025',
       announced: false,
       cheersCount: 142
     },
@@ -262,7 +262,7 @@ const inMemoryStore = {
       registrationNumber: 'GCE-2025-YY',
       branch: 'Grand Finale Stage Reveal',
       imageUrl: '/miss_fresher_card.jpg',
-      titleBadge: 'Miss Kshitiz 2026',
+      titleBadge: 'Miss Kshitiz 2025',
       announced: false,
       cheersCount: 168
     }
@@ -306,7 +306,7 @@ const inMemoryStore = {
       _id: 'hc-1',
       name: 'Pooja',
       batch: 'Batch 2025–29',
-      message: 'So hyped for Kshitiz 2026! Can\'t wait to walk the ramp and cheer for my department! 💃✨',
+      message: 'So hyped for Kshitiz 2025! Can\'t wait to walk the ramp and cheer for my department! 💃✨',
       branch: 'ECE',
       likes: 19,
       timestamp: new Date(Date.now() - 3600 * 1000).toISOString()
@@ -368,7 +368,7 @@ const inMemoryStore = {
   posters: [
     {
       _id: 'pos-1',
-      title: 'Kshitiz 2026 Official Genesis Poster',
+      title: 'Kshitiz 2025 Official Genesis Poster',
       description: 'The Official Reveal Poster for Gaya College of Engineering Fresher Celebrations',
       url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1200&auto=format&fit=crop',
       isActive: true,
@@ -378,7 +378,7 @@ const inMemoryStore = {
   settings: {
     eventDate: '2026-10-08T17:00:00+05:30',
     venue: 'Academic campus, GCE',
-    googleDriveLink: 'https://drive.google.com/drive/folders/KSHITIZ26_GCE_GAYA_OFFICIAL_PHOTOS',
+    googleDriveLink: 'https://drive.google.com/drive/folders/KSHITIZ25_GCE_GAYA_OFFICIAL_PHOTOS',
     instagramLink: 'https://instagram.com/gce_gaya_official',
     themeName: 'Kshitiz: Beyond The Horizon • Celestial Awakening',
     organizingBatch: 'Batch 2024-2028 (2nd Year)',
@@ -570,7 +570,7 @@ const SettingsSchema = new mongoose.Schema({
     registrationNumber: { type: String, default: '' },
     branch: { type: String, default: '' },
     imageUrl: { type: String, default: '' },
-    titleBadge: { type: String, default: 'Mr. Kshitiz 2026' },
+    titleBadge: { type: String, default: 'Mr. Kshitiz 2025' },
     announced: { type: Boolean, default: false }
   },
   mrsFresher: {
@@ -578,7 +578,7 @@ const SettingsSchema = new mongoose.Schema({
     registrationNumber: { type: String, default: '' },
     branch: { type: String, default: '' },
     imageUrl: { type: String, default: '' },
-    titleBadge: { type: String, default: 'Miss Kshitiz 2026' },
+    titleBadge: { type: String, default: 'Miss Kshitiz 2025' },
     announced: { type: Boolean, default: false }
   }
 });
@@ -631,7 +631,7 @@ const verifyAdmin = (req, res, next) => {
 };
 
 // Helper: Resolve image URL from uploaded file or direct link
-const resolveImageUrl = async (req, file, defaultFolder = 'kshitiz26') => {
+const resolveImageUrl = async (req, file, defaultFolder = 'kshitiz25') => {
   if (!file) return null;
 
   // If Cloudinary keys are configured, upload to Cloudinary
@@ -1483,12 +1483,12 @@ app.post('/api/admin/awards', verifyAdmin, upload.fields([{ name: 'mrImage' }, {
     }
 
     if (req.files && req.files['mrImage'] && req.files['mrImage'][0]) {
-      const resImg = await resolveImageUrl(req, req.files['mrImage'][0], 'kshitiz26/winners');
+      const resImg = await resolveImageUrl(req, req.files['mrImage'][0], 'kshitiz25/winners');
       mrImageUrl = resImg.url;
     }
 
     if (req.files && req.files['mrsImage'] && req.files['mrsImage'][0]) {
-      const resImg = await resolveImageUrl(req, req.files['mrsImage'][0], 'kshitiz26/winners');
+      const resImg = await resolveImageUrl(req, req.files['mrsImage'][0], 'kshitiz25/winners');
       mrsImageUrl = resImg.url;
     }
 
@@ -1498,7 +1498,7 @@ app.post('/api/admin/awards', verifyAdmin, upload.fields([{ name: 'mrImage' }, {
         registrationNumber: sanitizeText(mrRegNo, 40) || inMemoryStore.awards.mrFresher.registrationNumber,
         branch: sanitizeText(mrBranch, 80) || inMemoryStore.awards.mrFresher.branch,
         imageUrl: mrImageUrl || inMemoryStore.awards.mrFresher.imageUrl,
-        titleBadge: 'Mr. Kshitiz 2026',
+        titleBadge: 'Mr. Kshitiz 2025',
         announced: mrAnnounced === 'true' || mrAnnounced === true
       },
       mrsFresher: {
@@ -1506,7 +1506,7 @@ app.post('/api/admin/awards', verifyAdmin, upload.fields([{ name: 'mrImage' }, {
         registrationNumber: sanitizeText(mrsRegNo, 40) || inMemoryStore.awards.mrsFresher.registrationNumber,
         branch: sanitizeText(mrsBranch, 80) || inMemoryStore.awards.mrsFresher.branch,
         imageUrl: mrsImageUrl || inMemoryStore.awards.mrsFresher.imageUrl,
-        titleBadge: 'Miss Kshitiz 2026',
+        titleBadge: 'Miss Kshitiz 2025',
         announced: mrsAnnounced === 'true' || mrsAnnounced === true
       }
     };

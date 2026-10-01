@@ -324,7 +324,7 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
     setIsDownloading(true);
     setDownloadSuccess(false);
 
-    const fileName = `Kshitiz_2026_Entry_Pass_${roll.replace(/[^a-zA-Z0-9_-]/g, '_')}.png`;
+    const fileName = `Kshitiz_2025_Entry_Pass_${roll.replace(/[^a-zA-Z0-9_-]/g, '_')}.png`;
 
     try {
       // Determine target element
@@ -439,7 +439,7 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
                 <span className="text-[10px] font-black tracking-widest uppercase bg-gradient-to-r from-purple-500 to-pink-500 text-white px-2.5 py-1 rounded-full shadow-md inline-block">
                   VIP PASS
                 </span>
-                <span className="block text-[9px] font-mono text-cyan-400 mt-1">2026 CONCLAVE</span>
+                <span className="block text-[9px] font-mono text-cyan-400 mt-1">2025 CONCLAVE</span>
               </div>
             </div>
 
@@ -542,7 +542,7 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
                   <ShieldCheck className="w-5 h-5 text-cyan-400" />
                   <span className="text-xs font-bold text-white uppercase tracking-wider">Entry Terms & Guidelines</span>
                 </div>
-                <span className="text-[10px] font-mono text-purple-300">GCE-KSHITIZ-2026</span>
+                <span className="text-[10px] font-mono text-purple-300">GCE-KSHITIZ-2025</span>
               </div>
 
               <div className="space-y-2.5 text-[11px] text-slate-300">

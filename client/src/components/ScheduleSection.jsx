@@ -153,7 +153,7 @@ const ScheduleSection = ({ schedule }) => {
     const icsData = [
       'BEGIN:VCALENDAR',
       'VERSION:2.0',
-      'PRODID:-//GCE Gaya//Kshitiz 2026//EN',
+      'PRODID:-//GCE Gaya//Kshitiz 2025//EN',
       'CALSCALE:GREGORIAN',
       'METHOD:PUBLISH',
       'BEGIN:VEVENT',
@@ -171,7 +171,7 @@ const ScheduleSection = ({ schedule }) => {
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'Kshitiz_2026_Event_Schedule.ics');
+    link.setAttribute('download', 'Kshitiz_2025_Event_Schedule.ics');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

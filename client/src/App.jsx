@@ -119,7 +119,7 @@ function App() {
           googleDriveLink={settings?.googleDriveLink}
         />
 
-        {/* Hall of Fame: Mr & Miss Kshitiz 2026 Crowning & Judging Criteria */}
+        {/* Hall of Fame: Mr & Miss Kshitiz 2025 Crowning & Judging Criteria */}
         <HallOfFameSection awards={settings ? { mrFresher: settings.mrFresher, mrsFresher: settings.mrsFresher } : null} />
 
       </main>

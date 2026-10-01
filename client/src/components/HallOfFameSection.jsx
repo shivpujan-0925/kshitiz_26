@@ -77,7 +77,7 @@ const HallOfFameSection = ({ awards }) => {
           The Royal Crowning Ceremony
         </div>
         <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-white font-heading tracking-tight">
-          Mr. & Miss Kshitiz 2026
+          Mr. & Miss Kshitiz 2025
         </h2>
         <p className="text-slate-400 text-sm sm:text-base md:text-lg mt-3">
           Recognizing the icons of charm, intellect, stage presence, and celestial poise of Batch 2025–2029.
@@ -136,7 +136,7 @@ const HallOfFameSection = ({ awards }) => {
               </div>
 
               <span className="text-xs font-black tracking-widest uppercase text-amber-400 bg-amber-950/70 px-4 py-1.5 rounded-full border border-amber-500/40 mb-2 shadow-sm">
-                {mr?.titleBadge || 'Mr. Kshitiz 2026'}
+                {mr?.titleBadge || 'Mr. Kshitiz 2025'}
               </span>
 
               <h3 className="text-2xl sm:text-3xl font-black text-white mt-1 tracking-tight">
@@ -208,7 +208,7 @@ const HallOfFameSection = ({ awards }) => {
               </div>
 
               <span className="text-xs font-black tracking-widest uppercase text-pink-400 bg-pink-950/70 px-4 py-1.5 rounded-full border border-pink-500/40 mb-2 shadow-sm">
-                {mrs?.titleBadge || 'Miss Kshitiz 2026'}
+                {mrs?.titleBadge || 'Miss Kshitiz 2025'}
               </span>
 
               <h3 className="text-2xl sm:text-3xl font-black text-white mt-1 tracking-tight">

@@ -20,7 +20,7 @@ const INITIAL_CHEERS = [
     name: 'Pooja Singh',
     batch: 'Batch 2025–29',
     branch: 'ECE',
-    message: 'So hyped for Kshitiz 2026! Can\'t wait to walk the ramp and cheer for my department! 💃✨',
+    message: 'So hyped for Kshitiz 2025! Can\'t wait to walk the ramp and cheer for my department! 💃✨',
     likes: 24,
     timestamp: '2026-09-29T19:00:00.000Z'
   },
@@ -331,7 +331,7 @@ const HypeWallSection = () => {
 
                 <div className="flex items-center justify-between pt-2 border-t border-white/5">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] text-slate-500">#Kshitiz2026 #GCEGaya</span>
+                    <span className="text-[10px] text-slate-500">#Kshitiz2025 #GCEGaya</span>
                     {isAdmin && (
                       <button
                         onClick={() => setDeleteModal({ isOpen: true, id: item._id, name: item.name, loading: false })}
