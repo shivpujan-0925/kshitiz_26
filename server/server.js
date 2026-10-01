@@ -105,7 +105,15 @@ app.use(cors({
       return callback(null, true);
     }
 
-    // 3. Automatically permit standard web hosting platforms (Vercel, Render, Netlify, GitHub Pages)
+    // 3. If specific allowed origins are configured (e.g. FRONTEND_URL or ALLOWED_ORIGINS), enforce them strictly
+    if (configuredOrigins.length > 0) {
+      if (configuredOrigins.includes('*') || configuredOrigins.includes(normalized)) {
+        return callback(null, true);
+      }
+      return callback(null, false);
+    }
+
+    // 4. When no specific origins are defined (development/initial deployment), allow standard hosting platforms
     if (
       /\.vercel\.app$/.test(normalized) ||
       /\.onrender\.com$/.test(normalized) ||
@@ -115,13 +123,8 @@ app.use(cors({
       return callback(null, true);
     }
 
-    // 4. Check against explicitly configured allowed origins (or if wildcard is present or none defined)
-    if (configuredOrigins.length === 0 || configuredOrigins.includes('*') || configuredOrigins.includes(normalized)) {
-      return callback(null, true);
-    }
-
-    // 5. If not allowed, respond cleanly with false (prevents 500 unhandled errors from breaking preflight)
-    return callback(null, false);
+    // 5. Default: allow if no origins defined
+    return callback(null, true);
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
@@ -638,6 +641,12 @@ const resolveImageUrl = async (req, file, defaultFolder = 'kshitiz25') => {
   if (process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_KEY !== 'your_api_key') {
     try {
       const uploadRes = await cloudinary.uploader.upload(file.path, { folder: defaultFolder });
+      // Clean up temporary local disk file after uploading to cloud
+      try {
+        if (file.path && fs.existsSync(file.path)) {
+          fs.unlinkSync(file.path);
+        }
+      } catch (cleanupErr) {}
       return { url: uploadRes.secure_url, publicId: uploadRes.public_id };
     } catch (err) {
       console.warn('Cloudinary upload error, falling back to local file link:', err.message);
@@ -1056,7 +1065,7 @@ app.post('/api/admin/login', adminLoginLimiter, (req, res) => {
     const configuredPassword = (ADMIN_PASSWORD || 'kshitiz2026@gce').trim();
 
     const isUserValid = safeCompare(username.toLowerCase(), configuredUsername.toLowerCase());
-    const isPassValid = safeCompare(password, configuredPassword) || safeCompare(password, 'astra2026@gce') || safeCompare(password, 'kshitiz2026@gce');
+    const isPassValid = safeCompare(password, configuredPassword);
 
     if (isUserValid && isPassValid) {
       const token = jwt.sign(

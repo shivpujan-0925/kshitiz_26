@@ -15,14 +15,22 @@ import {
   Check,
   FileImage
 } from 'lucide-react';
-import { toPng } from 'html-to-image';
+import { toJpeg, toPng } from 'html-to-image';
 import confetti from 'canvas-confetti';
+
+const WhatsAppIcon = ({ className = "w-3.5 h-3.5" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.456 5.711 1.457h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+  </svg>
+);
 
 const DigitalPassCard = ({ participant, isPreview = false }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadSuccess, setDownloadSuccess] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
+  const [shareSuccess, setShareSuccess] = useState(false);
+  const [shareNotice, setShareNotice] = useState(null);
 
   const frontCardRef = useRef(null);
   const backCardRef = useRef(null);
@@ -63,13 +71,17 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
   };
 
   // High-Resolution 2D Canvas Fallback Renderer (guaranteed 100% success on any browser/device)
-  const drawPassOnCanvas = () => {
+  const drawPassOnCanvas = (format = 'image/jpeg') => {
     const canvas = document.createElement('canvas');
     const width = 800;
     const height = 1140;
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext('2d');
+
+    // Solid dark canvas base for JPEG export (avoids transparent/black corner anomalies)
+    ctx.fillStyle = '#040614';
+    ctx.fillRect(0, 0, width, height);
 
     // Helper: Rounded Rectangle
     const roundRect = (x, y, w, h, radius) => {
@@ -316,45 +328,77 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
     ctx.textAlign = 'center';
     ctx.fillText(`* ${passId} * BATCH 2025-29 OFFICIAL CONCLAVE ENTRY CREDENTIAL *`, width / 2, 1075);
 
-    return canvas.toDataURL('image/png', 1.0);
+    return canvas.toDataURL(format, 0.95);
   };
 
-  // Main Image Download Handler
+  // High-Quality Pass Image Generator (JPG/PNG with canvas fallback and Blob export)
+  const generatePassImageData = async (format = 'image/jpeg') => {
+    const targetElement = isFlipped ? backCardRef.current : frontCardRef.current;
+    let dataUrl = null;
+
+    if (targetElement) {
+      try {
+        const renderOpts = {
+          cacheBust: true,
+          pixelRatio: 2.5,
+          quality: 0.95,
+          backgroundColor: '#040614',
+          style: {
+            transform: 'none',
+            borderRadius: '24px'
+          }
+        };
+
+        if (format === 'image/jpeg') {
+          dataUrl = await toJpeg(targetElement, renderOpts);
+        } else {
+          dataUrl = await toPng(targetElement, renderOpts);
+        }
+      } catch (domErr) {
+        console.warn('DOM to image renderer notice, falling back to canvas:', domErr);
+      }
+    }
+
+    if (!dataUrl) {
+      dataUrl = drawPassOnCanvas(format);
+    }
+
+    // Convert dataUrl to Blob
+    let blob = null;
+    try {
+      const res = await fetch(dataUrl);
+      blob = await res.blob();
+    } catch {
+      try {
+        const parts = dataUrl.split(',');
+        const mime = parts[0].match(/:(.*?);/)?.[1] || format;
+        const bstr = atob(parts[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        blob = new Blob([u8arr], { type: mime });
+      } catch (err) {
+        console.error('Blob conversion error:', err);
+      }
+    }
+
+    return { dataUrl, blob };
+  };
+
+  // Main Image Download Handler (Saves high-res JPG directly to device)
   const handleDownloadImage = async () => {
     setIsDownloading(true);
     setDownloadSuccess(false);
 
-    const fileName = `Kshitiz_2025_Entry_Pass_${roll.replace(/[^a-zA-Z0-9_-]/g, '_')}.png`;
+    const cleanRoll = roll.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const sideSuffix = isFlipped ? '_Rules' : '';
+    const fileName = `Kshitiz_2025_Entry_Pass_${cleanRoll}${sideSuffix}.jpg`;
 
     try {
-      // Determine target element
-      const targetElement = isFlipped ? backCardRef.current : frontCardRef.current;
+      const { dataUrl } = await generatePassImageData('image/jpeg');
 
-      let dataUrl = null;
-
-      if (targetElement && !isFlipped) {
-        try {
-          dataUrl = await toPng(targetElement, {
-            cacheBust: true,
-            pixelRatio: 2.5,
-            quality: 1,
-            backgroundColor: '#040614',
-            style: {
-              transform: 'none',
-              borderRadius: '24px'
-            }
-          });
-        } catch (domErr) {
-          console.warn('DOM to image notice, switching to canvas renderer:', domErr);
-        }
-      }
-
-      // If toPng failed or back card requested, use canvas generator
-      if (!dataUrl) {
-        dataUrl = drawPassOnCanvas();
-      }
-
-      // Trigger standard browser download
       const link = document.createElement('a');
       link.download = fileName;
       link.href = dataUrl;
@@ -370,11 +414,10 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
         colors: ['#00F5D4', '#8B5CF6', '#EC4899', '#FBBF24']
       });
 
-      setTimeout(() => setDownloadSuccess(false), 3000);
+      setTimeout(() => setDownloadSuccess(false), 3500);
     } catch (err) {
       console.error('Download error:', err);
-      // Hard fallback: trigger canvas
-      const fallbackUrl = drawPassOnCanvas();
+      const fallbackUrl = drawPassOnCanvas('image/jpeg');
       const link = document.createElement('a');
       link.download = fileName;
       link.href = fallbackUrl;
@@ -386,17 +429,90 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
     }
   };
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: `Kshitiz '25 Entry Pass - ${name}`,
-        text: `Here is my official entry pass for Kshitiz '25 at Gaya College of Engineering! Roll: ${roll}`,
-        url: window.location.href,
-      }).catch(() => {});
-    } else {
-      navigator.clipboard?.writeText(window.location.href);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+  // Share Pass Handler: Generates JPG image and shares directly to WhatsApp or native share sheet
+  const handleShare = async () => {
+    if (isSharing) return;
+    setIsSharing(true);
+    setShareNotice(null);
+
+    const cleanRoll = roll.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const sideSuffix = isFlipped ? '_Rules' : '';
+    const fileName = `Kshitiz_2025_Entry_Pass_${cleanRoll}${sideSuffix}.jpg`;
+
+    try {
+      const { dataUrl, blob } = await generatePassImageData('image/jpeg');
+
+      const shareTitle = `Kshitiz '25 VIP Entry Pass - ${name}`;
+      const shareText = `🎟️ Official Entry Pass for Kshitiz '25\nAttendee: ${name}\nRoll: ${roll}\nVerification ID: ${passId}\nVenue: Academic Campus, GCE\nDate: 8 Oct 2026 • 05:00 PM`;
+
+      let sharedViaApi = false;
+
+      // 1. Try Native Web Share API with JPG File (Android Chrome, iOS Safari, etc.)
+      if (blob && typeof navigator !== 'undefined' && navigator.share && navigator.canShare) {
+        try {
+          const passFile = new File([blob], fileName, { type: 'image/jpeg' });
+          if (navigator.canShare({ files: [passFile] })) {
+            await navigator.share({
+              files: [passFile],
+              title: shareTitle,
+              text: shareText
+            });
+            sharedViaApi = true;
+            setShareSuccess(true);
+            setTimeout(() => setShareSuccess(false), 3000);
+          }
+        } catch (shareErr) {
+          if (shareErr.name === 'AbortError') {
+            // User cancelled share tray, cleanly exit
+            setIsSharing(false);
+            return;
+          }
+          console.warn('Native file share failed, switching to download + WhatsApp fallback:', shareErr);
+        }
+      }
+
+      // 2. If Web Share with files is not supported (Desktop browsers, etc.):
+      if (!sharedViaApi) {
+        // Automatically download the JPG card so user has the actual image file
+        if (dataUrl) {
+          const link = document.createElement('a');
+          link.download = fileName;
+          link.href = dataUrl;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+
+        // Open WhatsApp with prefilled entry pass details
+        const waMsg = encodeURIComponent(
+          `${shareText}\n\n[Pass image downloaded as JPG — attach the downloaded image in this chat!]`
+        );
+        const waUrl = `https://api.whatsapp.com/send?text=${waMsg}`;
+        window.open(waUrl, '_blank');
+
+        setShareNotice('Pass downloaded as JPG! Attach this image to your WhatsApp chat.');
+        setShareSuccess(true);
+        setTimeout(() => setShareSuccess(false), 4000);
+        setTimeout(() => setShareNotice(null), 8000);
+      }
+    } catch (err) {
+      console.error('Error sharing pass:', err);
+      // Failsafe: force canvas download
+      try {
+        const fallbackUrl = drawPassOnCanvas('image/jpeg');
+        const link = document.createElement('a');
+        link.download = fileName;
+        link.href = fallbackUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setShareNotice('Pass downloaded as JPG image!');
+        setTimeout(() => setShareNotice(null), 5000);
+      } catch (e) {
+        console.error('Fallback error:', e);
+      }
+    } finally {
+      setIsSharing(false);
     }
   };
 
@@ -592,33 +708,33 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
         <button
           type="button"
           onClick={handleDownloadImage}
-          disabled={isDownloading}
+          disabled={isDownloading || isSharing}
           className="w-full inline-flex items-center justify-center gap-2.5 py-3.5 px-6 rounded-2xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-600 hover:from-cyan-400 hover:to-pink-500 shadow-xl shadow-purple-600/30 hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer disabled:opacity-60"
         >
           {isDownloading ? (
             <>
               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              <span>Generating High-Res Pass...</span>
+              <span>Generating JPG Pass...</span>
             </>
           ) : downloadSuccess ? (
             <>
               <Check className="w-4 h-4 text-emerald-300" />
-              <span>✓ Pass Saved to Downloads!</span>
+              <span>✓ Pass Saved as JPG!</span>
             </>
           ) : (
             <>
               <Download className="w-4 h-4" />
-              <span>Save Pass to Phone (Image)</span>
+              <span>Save Pass to Phone (JPG Image)</span>
             </>
           )}
         </button>
 
-        {/* Secondary Actions: Flip & Share */}
+        {/* Secondary Actions: Flip & Share Pass (JPG) */}
         <div className="grid grid-cols-2 gap-2">
           <button
             type="button"
             onClick={() => setIsFlipped(!isFlipped)}
-            className="inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-semibold text-slate-200 glass-card hover:text-white hover:border-cyan-500/40 transition-all cursor-pointer"
+            className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-xs font-semibold text-slate-200 glass-card hover:text-white hover:border-cyan-500/40 transition-all cursor-pointer"
           >
             <RotateCw className="w-3.5 h-3.5 text-cyan-400" />
             <span>{isFlipped ? 'View Front Side' : 'View Back Rules'}</span>
@@ -627,18 +743,54 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
           <button
             type="button"
             onClick={handleShare}
-            className="inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-semibold text-slate-300 glass-card hover:text-white transition-all cursor-pointer"
-            title="Share Pass"
+            disabled={isSharing || isDownloading}
+            className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-xs font-semibold text-slate-200 glass-card hover:text-white hover:border-pink-500/40 transition-all cursor-pointer disabled:opacity-60"
+            title="Share Pass as JPG image to WhatsApp or other apps"
           >
-            <Share2 className="w-3.5 h-3.5 text-pink-400" />
-            <span>{copied ? 'Copied Link!' : 'Share Pass'}</span>
+            {isSharing ? (
+              <>
+                <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span>Preparing JPG...</span>
+              </>
+            ) : shareSuccess ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-300" />
+                <span>JPG Pass Ready!</span>
+              </>
+            ) : (
+              <>
+                <Share2 className="w-3.5 h-3.5 text-pink-400" />
+                <span>Share Pass (JPG)</span>
+              </>
+            )}
           </button>
         </div>
 
         {downloadSuccess && (
           <p className="text-[11px] text-emerald-400 font-semibold text-center mt-1 animate-fade-in flex items-center justify-center gap-1">
-            <CheckCircle2 className="w-3.5 h-3.5" /> Entry pass downloaded as PNG image! Keep it handy on your phone.
+            <CheckCircle2 className="w-3.5 h-3.5" /> Entry pass downloaded as high-resolution JPG image!
           </p>
+        )}
+
+        {shareNotice && (
+          <div className="mt-1 p-2.5 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 text-xs flex items-center justify-between gap-2.5 animate-fade-in shadow-lg">
+            <div className="flex items-center gap-2 text-left">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+              <p className="text-[11px] text-emerald-300 font-medium leading-tight">
+                {shareNotice}
+              </p>
+            </div>
+            <a
+              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`🎟️ Official Entry Pass for Kshitiz '25\nAttendee: ${name}\nRoll: ${roll}\nVerification ID: ${passId}\nVenue: Academic Campus, GCE\nDate: 8 Oct 2026 • 05:00 PM`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-2.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-[11px] inline-flex items-center gap-1.5 shadow-md transition-all flex-shrink-0"
+              title="Open WhatsApp"
+            >
+              <WhatsAppIcon className="w-3.5 h-3.5" />
+              <span>WhatsApp</span>
+            </a>
+          </div>
         )}
       </div>
 

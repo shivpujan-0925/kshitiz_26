@@ -84,11 +84,11 @@ const HallOfFameSection = ({ awards }) => {
         </p>
 
         {/* Tab Toggle */}
-        <div className="flex justify-center mt-6">
-          <div className="inline-flex p-1.5 rounded-2xl glass-panel border border-white/10">
+        <div className="flex justify-center mt-6 px-2">
+          <div className="inline-flex flex-wrap sm:flex-nowrap justify-center gap-1 p-1 sm:p-1.5 rounded-2xl glass-panel border border-white/10 max-w-full">
             <button
               onClick={() => setActiveTab('royalty')}
-              className={`flex items-center gap-2 px-5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+              className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 activeTab === 'royalty'
                   ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-black shadow-md'
                   : 'text-slate-400 hover:text-white'
@@ -100,7 +100,7 @@ const HallOfFameSection = ({ awards }) => {
 
             <button
               onClick={() => setActiveTab('criteria')}
-              className={`flex items-center gap-2 px-5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+              className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 activeTab === 'criteria'
                   ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md'
                   : 'text-slate-400 hover:text-white'

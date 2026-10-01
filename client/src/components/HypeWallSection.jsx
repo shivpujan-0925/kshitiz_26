@@ -194,12 +194,12 @@ const HypeWallSection = () => {
         </div>
 
         {/* Filter Pills */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {['All', '2025–29', '2024–28'].map(tab => (
             <button
               key={tab}
               onClick={() => setFilter(tab)}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+              className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 filter === tab
                   ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md'
                   : 'glass-card text-slate-300 hover:text-white'
