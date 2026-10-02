@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { 
-  Sparkles, 
-  User, 
-  Hash, 
-  GraduationCap, 
-  Briefcase, 
-  Send, 
-  CheckCircle2, 
+import {
+  Sparkles,
+  User,
+  Hash,
+  GraduationCap,
+  Briefcase,
+  Send,
+  CheckCircle2,
   AlertCircle,
   Phone,
   Flame,
@@ -74,8 +74,8 @@ const RegistrationSection = ({ onRegisterSuccess }) => {
     setLoading(true);
     setStatusMsg({ type: '', text: '' });
 
-    const finalActs = formData.acts === 'Other Custom Act' && formData.customAct.trim() 
-      ? formData.customAct.trim() 
+    const finalActs = formData.acts === 'Other Custom Act' && formData.customAct.trim()
+      ? formData.customAct.trim()
       : formData.acts;
 
     try {
@@ -155,7 +155,7 @@ const RegistrationSection = ({ onRegisterSuccess }) => {
 
   return (
     <section id="register" className="py-16 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto relative z-10">
-      
+
       {/* Title Header */}
       <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-bold uppercase tracking-widest mb-3 shadow-md">
@@ -175,11 +175,10 @@ const RegistrationSection = ({ onRegisterSuccess }) => {
         <div className="inline-flex p-1.5 rounded-2xl glass-panel border border-white/10 shadow-lg">
           <button
             onClick={() => setActiveTab('register')}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-              activeTab === 'register'
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${activeTab === 'register'
                 ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-600/30'
                 : 'text-slate-400 hover:text-white'
-            }`}
+              }`}
           >
             <Ticket className="w-4 h-4" />
             <span>New Registration & Pass</span>
@@ -187,11 +186,10 @@ const RegistrationSection = ({ onRegisterSuccess }) => {
 
           <button
             onClick={() => setActiveTab('lookup')}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-              activeTab === 'lookup'
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${activeTab === 'lookup'
                 ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-600/30'
                 : 'text-slate-400 hover:text-white'
-            }`}
+              }`}
           >
             <Search className="w-4 h-4" />
             <span>Find / Retrieve My Pass</span>
@@ -202,7 +200,7 @@ const RegistrationSection = ({ onRegisterSuccess }) => {
       {/* ================= TAB 1: REGISTRATION & LIVE PASS ================= */}
       {activeTab === 'register' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
+
           {/* Form Column */}
           <div className="lg:col-span-7 glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden">
             <div className="absolute -top-24 -right-24 w-60 h-60 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
@@ -218,11 +216,10 @@ const RegistrationSection = ({ onRegisterSuccess }) => {
             </div>
 
             {statusMsg.text && (
-              <div className={`p-4 rounded-2xl mb-6 text-sm flex items-start gap-3 border ${
-                statusMsg.type === 'success' 
+              <div className={`p-4 rounded-2xl mb-6 text-sm flex items-start gap-3 border ${statusMsg.type === 'success'
                   ? 'bg-emerald-950/70 text-emerald-300 border-emerald-500/40 shadow-lg shadow-emerald-950/40'
                   : 'bg-red-950/70 text-red-300 border-red-500/40 shadow-lg shadow-red-950/40'
-              }`}>
+                }`}>
                 {statusMsg.type === 'success' ? (
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                 ) : (
@@ -233,7 +230,7 @@ const RegistrationSection = ({ onRegisterSuccess }) => {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
-              
+
               {/* Row 1: Name & Registration Number */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -254,7 +251,7 @@ const RegistrationSection = ({ onRegisterSuccess }) => {
                 <div>
                   <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                     <Hash className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>Roll Number (Reg No.) *</span>
+                    <span>Registration No (Roll No.) *</span>
                   </label>
                   <input
                     type="text"
@@ -378,13 +375,13 @@ const RegistrationSection = ({ onRegisterSuccess }) => {
                 {confirmedParticipant ? 'Your Official Confirmed Pass' : 'Live Holographic Pass Preview'}
               </span>
               <p className="text-[11px] text-slate-400 mt-0.5">
-                {confirmedParticipant 
+                {confirmedParticipant
                   ? 'Ready to save or show at the red carpet gates!'
                   : 'Updates in real-time as you type your credentials!'}
               </p>
             </div>
 
-            <DigitalPassCard 
+            <DigitalPassCard
               participant={confirmedParticipant || {
                 fullName: formData.fullName || 'Aarav Sharma',
                 registrationNumber: formData.registrationNumber || '25101001',
