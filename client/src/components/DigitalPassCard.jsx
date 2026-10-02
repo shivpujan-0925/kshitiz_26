@@ -15,7 +15,6 @@ import {
   Check,
   FileImage
 } from 'lucide-react';
-import { toJpeg, toPng } from 'html-to-image';
 import confetti from 'canvas-confetti';
 
 const WhatsAppIcon = ({ className = "w-3.5 h-3.5" }) => (
@@ -70,8 +69,8 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
     return cells;
   };
 
-  // High-Resolution 2D Canvas Fallback Renderer (guaranteed 100% success on any browser/device)
-  const drawPassOnCanvas = (format = 'image/jpeg') => {
+  // High-Resolution 2D Canvas Renderer (Pixel-perfect, guaranteed flawless on all devices & resolutions)
+  const drawPassOnCanvas = (format = 'image/jpeg', side = 'front') => {
     const canvas = document.createElement('canvas');
     const width = 800;
     const height = 1140;
@@ -96,6 +95,27 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
       ctx.lineTo(x, y + radius);
       ctx.quadraticCurveTo(x, y, x + radius, y);
       ctx.closePath();
+    };
+
+    // Helper: Truncate or fit text
+    const drawFittedText = (text, x, y, maxW, initialFontSize, fontFamily, weight = 'normal', color = '#ffffff', align = 'left') => {
+      let size = initialFontSize;
+      ctx.textAlign = align;
+      ctx.fillStyle = color;
+      ctx.font = `${weight} ${size}px ${fontFamily}`;
+      while (ctx.measureText(text).width > maxW && size > 13) {
+        size -= 1;
+        ctx.font = `${weight} ${size}px ${fontFamily}`;
+      }
+      let displayText = text;
+      if (ctx.measureText(displayText).width > maxW) {
+        while (ctx.measureText(displayText + '...').width > maxW && displayText.length > 3) {
+          displayText = displayText.slice(0, -1);
+        }
+        displayText += '...';
+      }
+      ctx.fillText(displayText, x, y);
+      return size;
     };
 
     // 1. Background Card Body
@@ -154,167 +174,302 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
     ctx.fillText('Organized by Batch 2024–28', 130, 102);
 
     // VIP Pass Pill Badge
-    roundRect(width - 180, 65, 120, 36, 18);
-    const badgeGrad = ctx.createLinearGradient(width - 180, 0, width - 60, 0);
+    roundRect(width - 180, 62, 125, 34, 17);
+    const badgeGrad = ctx.createLinearGradient(width - 180, 0, width - 55, 0);
     badgeGrad.addColorStop(0, '#8B5CF6');
     badgeGrad.addColorStop(1, '#EC4899');
     ctx.fillStyle = badgeGrad;
     ctx.fill();
-    ctx.font = 'bold 13px Outfit, sans-serif';
+    ctx.font = 'bold 12px Outfit, sans-serif';
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
-    ctx.fillText('VIP PASS', width - 120, 88);
+    ctx.fillText('VIP PASS', width - 117, 84);
+
+    // Conclave Year Subtitle
+    ctx.font = '600 11px "JetBrains Mono", monospace';
+    ctx.fillStyle = '#00F5D4';
+    ctx.textAlign = 'center';
+    ctx.fillText('2025 CONCLAVE', width - 117, 110);
 
     // Divider
     ctx.beginPath();
-    ctx.moveTo(55, 135);
-    ctx.lineTo(width - 55, 135);
+    ctx.moveTo(55, 130);
+    ctx.lineTo(width - 55, 130);
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    // 5. Conclave Branding
-    // Pill
-    roundRect(width / 2 - 130, 165, 260, 28, 14);
-    ctx.fillStyle = 'rgba(6, 182, 212, 0.15)';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(6, 182, 212, 0.4)';
-    ctx.stroke();
-    ctx.font = 'bold 11px Outfit, sans-serif';
-    ctx.fillStyle = '#00F5D4';
-    ctx.textAlign = 'center';
-    ctx.fillText('★ OFFICIAL ENTRY CREDENTIAL ★', width / 2, 183);
+    if (side === 'back') {
+      // ================= BACK SIDE CANVAS RENDERING =================
+      roundRect(width / 2 - 165, 155, 330, 30, 15);
+      ctx.fillStyle = 'rgba(6, 182, 212, 0.15)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(6, 182, 212, 0.4)';
+      ctx.stroke();
+      ctx.font = 'bold 12px Outfit, sans-serif';
+      ctx.fillStyle = '#00F5D4';
+      ctx.textAlign = 'center';
+      ctx.fillText('🛡️ ENTRY TERMS & PROTOCOL GUIDELINES 🛡️', width / 2, 175);
 
-    // Main KSHITIZ '25 text
-    ctx.font = '900 68px Outfit, sans-serif';
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText("KSHITIZ '25", width / 2, 265);
+      ctx.font = '900 42px Outfit, sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText('CONCLAVE GUIDELINES', width / 2, 235);
 
-    ctx.font = '500 17px "Plus Jakarta Sans", sans-serif';
-    ctx.fillStyle = '#c084fc';
-    ctx.fillText('Beyond The Horizon • Celestial Awakening', width / 2, 300);
+      ctx.font = '500 15px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = '#c084fc';
+      ctx.fillText('Kshitiz 2025 • Official Code of Conduct', width / 2, 265);
 
-    // 6. Student Info Box
-    roundRect(55, 335, width - 110, 480, 24);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
+      // Rules Box
+      roundRect(55, 295, width - 110, 520, 24);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
 
-    // Inner Fields
-    ctx.textAlign = 'left';
-    // Name
-    ctx.font = 'bold 13px Outfit, sans-serif';
-    ctx.fillStyle = '#94a3b8';
-    ctx.fillText('ATTENDEE NAME', 85, 375);
-    ctx.font = 'bold 28px Outfit, sans-serif';
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText(name, 85, 412);
-
-    // Roll Number Pill
-    ctx.textAlign = 'right';
-    ctx.font = 'bold 13px Outfit, sans-serif';
-    ctx.fillStyle = '#94a3b8';
-    ctx.fillText('ROLL / REG NO', width - 85, 375);
-    roundRect(width - 240, 388, 155, 36, 10);
-    ctx.fillStyle = 'rgba(6, 182, 212, 0.2)';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(6, 182, 212, 0.5)';
-    ctx.stroke();
-    ctx.font = 'bold 17px "JetBrains Mono", monospace';
-    ctx.fillStyle = '#00F5D4';
-    ctx.textAlign = 'center';
-    ctx.fillText(roll, width - 162, 412);
-
-    // Divider inside box
-    ctx.beginPath();
-    ctx.moveTo(85, 445);
-    ctx.lineTo(width - 85, 445);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-    ctx.stroke();
-
-    // Department
-    ctx.textAlign = 'left';
-    ctx.font = 'bold 13px Outfit, sans-serif';
-    ctx.fillStyle = '#94a3b8';
-    ctx.fillText('DEPARTMENT / BRANCH', 85, 485);
-    ctx.font = '600 20px "Plus Jakarta Sans", sans-serif';
-    ctx.fillStyle = '#e2e8f0';
-    ctx.fillText(branch, 85, 515);
-
-    // Role
-    ctx.font = 'bold 13px Outfit, sans-serif';
-    ctx.fillStyle = '#94a3b8';
-    ctx.fillText('ROLE', 85, 570);
-    ctx.font = 'bold 19px "Plus Jakarta Sans", sans-serif';
-    ctx.fillStyle = '#f472b6';
-    ctx.fillText(role, 85, 600);
-
-    // Chosen Act
-    ctx.font = 'bold 13px Outfit, sans-serif';
-    ctx.fillStyle = '#94a3b8';
-    ctx.fillText('CHOSEN ACT / PARTICIPATION', 85, 655);
-    ctx.font = 'bold 21px Outfit, sans-serif';
-    ctx.fillStyle = '#fcd34d';
-    ctx.fillText(acts, 85, 688);
-
-    // Status Badge
-    roundRect(85, 730, 160, 36, 10);
-    ctx.fillStyle = 'rgba(16, 185, 129, 0.2)';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(16, 185, 129, 0.5)';
-    ctx.stroke();
-    ctx.font = 'bold 14px Outfit, sans-serif';
-    ctx.fillStyle = '#34d399';
-    ctx.textAlign = 'center';
-    ctx.fillText('✓ CONFIRMED PASS', 165, 753);
-
-    // 7. Bottom Verification & QR Section
-    // Verification ID
-    ctx.textAlign = 'left';
-    ctx.font = '600 13px "JetBrains Mono", monospace';
-    ctx.fillStyle = '#94a3b8';
-    ctx.fillText('VERIFICATION TOKEN', 55, 870);
-    ctx.font = 'bold 18px "JetBrains Mono", monospace';
-    ctx.fillStyle = '#c084fc';
-    ctx.fillText(passId, 55, 898);
-
-    ctx.font = '500 15px "Plus Jakarta Sans", sans-serif';
-    ctx.fillStyle = '#cbd5e1';
-    ctx.fillText('📅 8 October 2026 • 05:00 PM Onwards', 55, 935);
-    ctx.fillText('📍 Academic campus, GCE', 55, 960);
-
-    // Draw Vector QR Code Box
-    const qrSize = 130;
-    const qrX = width - 55 - qrSize;
-    const qrY = 845;
-    roundRect(qrX, qrY, qrSize, qrSize, 18);
-    ctx.fillStyle = '#050714';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(0, 245, 212, 0.4)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // QR Patterns
-    const hashStr = passId + name;
-    for (let r = 0; r < 7; r++) {
-      for (let c = 0; c < 7; c++) {
-        const isCorner = (r < 2 && c < 2) || (r < 2 && c > 4) || (r > 4 && c < 2);
-        let filled = isCorner;
-        if (!isCorner) {
-          const charCode = hashStr.charCodeAt((r * 7 + c) % hashStr.length) || 65;
-          filled = (charCode + r * 3 + c * 5) % 2 === 0;
+      const rules = [
+        {
+          num: '1',
+          color: '#00F5D4',
+          title: 'REPORTING TIME & ENTRY',
+          body: 'Gates open at 04:30 PM. Conclave inauguration strictly at 05:15 PM at Academic campus, GCE. Late entries after 06:00 PM will require security desk clearance.'
+        },
+        {
+          num: '2',
+          color: '#A855F7',
+          title: 'DRESS CODE & THEME',
+          body: 'Theme "Celestial Horizon" — Royal Blues, Emeralds, Regal Ethnic wear, or Western Formals. Contestants must report in their designated stage attire.'
+        },
+        {
+          num: '3',
+          color: '#EC4899',
+          title: 'PASS & IDENTITY VERIFICATION',
+          body: 'Save this digital pass image on your phone. Present the QR code & verification token at the red carpet gates along with your valid Student ID card.'
+        },
+        {
+          num: '4',
+          color: '#F59E0B',
+          title: 'STAGE PERFORMERS & SLOTS',
+          body: 'All registered performers must report to Green Room Stage Left 30 minutes prior to their scheduled performance slot.'
         }
-        if (filled) {
-          roundRect(qrX + 16 + c * 14, qrY + 16 + r * 14, 11, 11, 2);
-          ctx.fillStyle = '#00F5D4';
-          ctx.fill();
+      ];
+
+      let ruleY = 345;
+      rules.forEach((rule) => {
+        // Number badge circle
+        ctx.beginPath();
+        ctx.arc(85, ruleY, 14, 0, Math.PI * 2);
+        ctx.fillStyle = `${rule.color}25`;
+        ctx.fill();
+        ctx.strokeStyle = rule.color;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.font = 'bold 13px Outfit, sans-serif';
+        ctx.fillStyle = rule.color;
+        ctx.textAlign = 'center';
+        ctx.fillText(rule.num, 85, ruleY + 4.5);
+
+        // Rule Title
+        ctx.textAlign = 'left';
+        ctx.font = 'bold 14px Outfit, sans-serif';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(rule.title, 115, ruleY + 4);
+
+        // Rule Body (Wrap text)
+        ctx.font = '500 13px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#cbd5e1';
+        
+        const words = rule.body.split(' ');
+        let line = '';
+        let lineY = ruleY + 24;
+        for (let n = 0; n < words.length; n++) {
+          const testLine = line + words[n] + ' ';
+          const metrics = ctx.measureText(testLine);
+          if (metrics.width > 570 && n > 0) {
+            ctx.fillText(line, 115, lineY);
+            line = words[n] + ' ';
+            lineY += 19;
+          } else {
+            line = testLine;
+          }
+        }
+        ctx.fillText(line, 115, lineY);
+
+        ruleY += 80;
+      });
+
+      // Organizing Committee Advisory sub-box
+      roundRect(80, 680, width - 160, 110, 16);
+      ctx.fillStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.35)';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      ctx.textAlign = 'left';
+      ctx.font = 'bold 12px Outfit, sans-serif';
+      ctx.fillStyle = '#c084fc';
+      ctx.fillText('SENIOR ORGANIZING COMMITTEE DESK • BATCH 2024–28', 100, 708);
+
+      ctx.font = '500 12px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = '#cbd5e1';
+      ctx.fillText('Anti-Ragging is strictly enforced with zero tolerance for indiscipline or illicit substances.', 100, 730);
+      ctx.fillText('Campus security and flying squad teams are active throughout the event duration.', 100, 750);
+      ctx.fillText('Have fun, make lifelong memories, and celebrate the awakening of Kshitiz!', 100, 770);
+
+      // Bottom info
+      ctx.font = '600 14px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = '#00F5D4';
+      ctx.fillText('📍 Academic Campus, Gaya College of Engineering', 55, 875);
+
+      ctx.font = 'bold 14px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#c084fc';
+      ctx.textAlign = 'right';
+      ctx.fillText(`TOKEN: ${passId}`, width - 55, 875);
+
+    } else {
+      // ================= FRONT SIDE CANVAS RENDERING =================
+      // 5. Conclave Branding
+      roundRect(width / 2 - 135, 155, 270, 28, 14);
+      ctx.fillStyle = 'rgba(6, 182, 212, 0.15)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(6, 182, 212, 0.4)';
+      ctx.stroke();
+      ctx.font = 'bold 11px Outfit, sans-serif';
+      ctx.fillStyle = '#00F5D4';
+      ctx.textAlign = 'center';
+      ctx.fillText('★ OFFICIAL ENTRY CREDENTIAL ★', width / 2, 174);
+
+      // Main KSHITIZ '25 text with cosmic gradient
+      const kshitizGrad = ctx.createLinearGradient(width / 2 - 180, 0, width / 2 + 180, 0);
+      kshitizGrad.addColorStop(0, '#00F5D4');
+      kshitizGrad.addColorStop(0.5, '#C084FC');
+      kshitizGrad.addColorStop(1, '#F59E0B');
+      ctx.font = '900 68px Outfit, sans-serif';
+      ctx.fillStyle = kshitizGrad;
+      ctx.textAlign = 'center';
+      ctx.fillText("KSHITIZ '25", width / 2, 255);
+
+      ctx.font = '500 16px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = '#c084fc';
+      ctx.fillText('Beyond The Horizon • Celestial Awakening', width / 2, 288);
+
+      // 6. Student Info Box
+      roundRect(55, 320, width - 110, 500, 24);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Attendee Name
+      ctx.textAlign = 'left';
+      ctx.font = 'bold 13px Outfit, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('ATTENDEE NAME', 85, 360);
+      drawFittedText(name, 85, 400, 420, 30, 'Outfit, sans-serif', 'bold', '#ffffff', 'left');
+
+      // Roll / Reg No Pill
+      ctx.textAlign = 'right';
+      ctx.font = 'bold 13px Outfit, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('ROLL / REG NO', width - 85, 360);
+
+      const rollStr = roll.toUpperCase();
+      const rollBoxW = Math.max(160, rollStr.length * 14 + 30);
+      roundRect(width - 85 - rollBoxW, 372, rollBoxW, 36, 10);
+      ctx.fillStyle = 'rgba(6, 182, 212, 0.2)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(6, 182, 212, 0.5)';
+      ctx.stroke();
+      ctx.font = 'bold 16px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#00F5D4';
+      ctx.textAlign = 'center';
+      ctx.fillText(rollStr, width - 85 - rollBoxW / 2, 396);
+
+      // Divider inside box
+      ctx.beginPath();
+      ctx.moveTo(85, 430);
+      ctx.lineTo(width - 85, 430);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+      ctx.stroke();
+
+      // Department / Branch
+      ctx.textAlign = 'left';
+      ctx.font = 'bold 13px Outfit, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('DEPARTMENT / BRANCH', 85, 470);
+      drawFittedText(branch, 85, 504, 620, 20, '"Plus Jakarta Sans", sans-serif', '600', '#e2e8f0', 'left');
+
+      // Role
+      ctx.font = 'bold 13px Outfit, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('ROLE', 85, 555);
+      drawFittedText(role, 85, 588, 620, 19, '"Plus Jakarta Sans", sans-serif', 'bold', '#f472b6', 'left');
+
+      // Chosen Act / Category
+      ctx.font = 'bold 13px Outfit, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('CHOSEN ACT / PARTICIPATION', 85, 640);
+      drawFittedText(acts, 85, 674, 620, 21, 'Outfit, sans-serif', 'bold', '#fcd34d', 'left');
+
+      // Status Badge
+      roundRect(85, 725, 175, 36, 10);
+      ctx.fillStyle = 'rgba(16, 185, 129, 0.2)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(16, 185, 129, 0.5)';
+      ctx.stroke();
+      ctx.font = 'bold 13px Outfit, sans-serif';
+      ctx.fillStyle = '#34d399';
+      ctx.textAlign = 'center';
+      ctx.fillText('✓ CONFIRMED PASS', 172, 748);
+
+      // 7. Bottom Verification & QR Section
+      // Verification ID
+      ctx.textAlign = 'left';
+      ctx.font = '600 13px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('VERIFICATION TOKEN', 55, 865);
+      ctx.font = 'bold 18px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#c084fc';
+      ctx.fillText(passId, 55, 893);
+
+      ctx.font = '500 15px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = '#cbd5e1';
+      ctx.fillText('📅 8 October 2026 • 05:00 PM Onwards', 55, 930);
+      ctx.fillText('📍 Academic campus, GCE', 55, 955);
+
+      // Draw Vector QR Code Box
+      const qrSize = 130;
+      const qrX = width - 55 - qrSize;
+      const qrY = 845;
+      roundRect(qrX, qrY, qrSize, qrSize, 18);
+      ctx.fillStyle = '#050714';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0, 245, 212, 0.4)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // QR Patterns
+      const hashStr = passId + name;
+      for (let r = 0; r < 7; r++) {
+        for (let c = 0; c < 7; c++) {
+          const isCorner = (r < 2 && c < 2) || (r < 2 && c > 4) || (r > 4 && c < 2);
+          let filled = isCorner;
+          if (!isCorner) {
+            const charCode = hashStr.charCodeAt((r * 7 + c) % hashStr.length) || 65;
+            filled = (charCode + r * 3 + c * 5) % 2 === 0;
+          }
+          if (filled) {
+            roundRect(qrX + 16 + c * 14, qrY + 16 + r * 14, 11, 11, 2);
+            ctx.fillStyle = '#00F5D4';
+            ctx.fill();
+          }
         }
       }
     }
 
-    // Barcode Strip along bottom
+    // Barcode Strip along bottom for BOTH sides
     const barY = 1010;
     const barHeight = 40;
     ctx.fillStyle = '#ffffff';
@@ -331,39 +486,12 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
     return canvas.toDataURL(format, 0.95);
   };
 
-  // High-Quality Pass Image Generator (JPG/PNG with canvas fallback and Blob export)
+  // High-Quality Pass Image Generator (Direct 2D Canvas rendering for crisp, flawless exports)
   const generatePassImageData = async (format = 'image/jpeg') => {
-    const targetElement = isFlipped ? backCardRef.current : frontCardRef.current;
-    let dataUrl = null;
+    const side = isFlipped ? 'back' : 'front';
+    const dataUrl = drawPassOnCanvas(format, side);
 
-    if (targetElement) {
-      try {
-        const renderOpts = {
-          cacheBust: true,
-          pixelRatio: 2.5,
-          quality: 0.95,
-          backgroundColor: '#040614',
-          style: {
-            transform: 'none',
-            borderRadius: '24px'
-          }
-        };
-
-        if (format === 'image/jpeg') {
-          dataUrl = await toJpeg(targetElement, renderOpts);
-        } else {
-          dataUrl = await toPng(targetElement, renderOpts);
-        }
-      } catch (domErr) {
-        console.warn('DOM to image renderer notice, falling back to canvas:', domErr);
-      }
-    }
-
-    if (!dataUrl) {
-      dataUrl = drawPassOnCanvas(format);
-    }
-
-    // Convert dataUrl to Blob
+    // Convert dataUrl to Blob for mobile file-sharing & downloads
     let blob = null;
     try {
       const res = await fetch(dataUrl);
@@ -417,7 +545,7 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
       setTimeout(() => setDownloadSuccess(false), 3500);
     } catch (err) {
       console.error('Download error:', err);
-      const fallbackUrl = drawPassOnCanvas('image/jpeg');
+      const fallbackUrl = drawPassOnCanvas('image/jpeg', isFlipped ? 'back' : 'front');
       const link = document.createElement('a');
       link.download = fileName;
       link.href = fallbackUrl;
@@ -499,7 +627,7 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
       console.error('Error sharing pass:', err);
       // Failsafe: force canvas download
       try {
-        const fallbackUrl = drawPassOnCanvas('image/jpeg');
+        const fallbackUrl = drawPassOnCanvas('image/jpeg', isFlipped ? 'back' : 'front');
         const link = document.createElement('a');
         link.download = fileName;
         link.href = fallbackUrl;
@@ -539,30 +667,30 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
 
             {/* Top Pass Header */}
             <div className="flex items-center justify-between border-b border-white/10 pb-3 sm:pb-4 mb-3 sm:mb-4 relative z-10">
-              <div className="flex items-center gap-2.5 text-left">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-pink-600 to-cyan-400 p-[1.5px] shadow-lg">
+              <div className="flex items-center gap-2.5 text-left min-w-0">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-pink-600 to-cyan-400 p-[1.5px] shadow-lg flex-shrink-0">
                   <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center font-brand font-black text-cyan-300 text-sm">
                     GCE
                   </div>
                 </div>
-                <div>
-                  <h4 className="text-[11px] font-bold text-cyan-300 tracking-wider uppercase">Gaya College of Engineering</h4>
-                  <p className="text-[10px] text-slate-400 font-medium">Batch 2024–28 Presents</p>
+                <div className="min-w-0">
+                  <h4 className="text-[11px] font-bold text-cyan-300 tracking-wider uppercase leading-snug whitespace-nowrap">Gaya College of Engineering</h4>
+                  <p className="text-[10px] text-slate-400 font-medium leading-snug whitespace-nowrap">Batch 2024–28 Presents</p>
                 </div>
               </div>
 
-              <div className="text-right">
-                <span className="text-[10px] font-black tracking-widest uppercase bg-gradient-to-r from-purple-500 to-pink-500 text-white px-2.5 py-1 rounded-full shadow-md inline-block">
+              <div className="text-right flex-shrink-0">
+                <span className="text-[10px] font-black tracking-widest uppercase bg-gradient-to-r from-purple-500 to-pink-500 text-white px-2.5 py-1 rounded-full shadow-md inline-block whitespace-nowrap">
                   VIP PASS
                 </span>
-                <span className="block text-[9px] font-mono text-cyan-400 mt-1">2025 CONCLAVE</span>
+                <span className="block text-[9px] font-mono text-cyan-400 mt-1 whitespace-nowrap">2025 CONCLAVE</span>
               </div>
             </div>
 
             {/* Event Branding */}
             <div className="text-center my-2 sm:my-3 relative z-10">
-              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-[10px] font-bold tracking-widest text-cyan-300 uppercase mb-1">
-                <Sparkles className="w-3 h-3 text-cyan-400" /> OFFICIAL ENTRY CREDENTIAL
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-[10px] font-bold tracking-widest text-cyan-300 uppercase mb-1 whitespace-nowrap">
+                <Sparkles className="w-3 h-3 text-cyan-400 flex-shrink-0" /> OFFICIAL ENTRY CREDENTIAL
               </div>
               <h3 className="text-2xl sm:text-4xl font-black font-brand tracking-wider text-white">
                 <span className="text-gradient-cosmic">KSHITIZ</span>{' '}
@@ -576,15 +704,15 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
             {/* Student Info Card Deck */}
             <div className="p-3.5 sm:p-4 rounded-2xl bg-white/[0.04] border border-white/10 my-3 sm:my-4 text-left space-y-2 relative z-10 backdrop-blur-md">
               <div className="flex items-center justify-between gap-2">
-                <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Attendee Name</span>
-                  <span className="text-base sm:text-lg font-black text-white tracking-tight leading-tight block">
+                <div className="min-w-0">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block whitespace-nowrap">Attendee Name</span>
+                  <span className="text-base sm:text-lg font-black text-white tracking-tight leading-snug block truncate">
                     {name}
                   </span>
                 </div>
-                <div className="text-right">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Roll / Reg No</span>
-                  <span className="text-xs sm:text-sm font-black font-mono text-cyan-300 bg-cyan-950/80 px-2.5 py-0.5 rounded-md border border-cyan-500/30 inline-block">
+                <div className="text-right flex-shrink-0">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block whitespace-nowrap">Roll / Reg No</span>
+                  <span className="text-xs sm:text-sm font-black font-mono text-cyan-300 bg-cyan-950/80 px-2.5 py-0.5 rounded-md border border-cyan-500/30 inline-block whitespace-nowrap">
                     {roll}
                   </span>
                 </div>
