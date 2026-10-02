@@ -97,7 +97,7 @@ app.use(cors({
   origin: (origin, callback) => {
     // 1. Allow non-browser requests (curl, postman, server-to-server, mobile native)
     if (!origin) return callback(null, true);
-    
+
     const normalized = origin.replace(/\/$/, '').toLowerCase();
 
     // 2. Always allow localhost and 127.0.0.1 on any port (for local dev & admin testing against deployed API)
@@ -157,7 +157,7 @@ const diskStorage = multer.diskStorage({
   }
 });
 
-const upload = multer({ 
+const upload = multer({
   storage: diskStorage,
   fileFilter: imageFileFilter,
   limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
@@ -646,7 +646,7 @@ const resolveImageUrl = async (req, file, defaultFolder = 'kshitiz25') => {
         if (file.path && fs.existsSync(file.path)) {
           fs.unlinkSync(file.path);
         }
-      } catch (cleanupErr) {}
+      } catch (cleanupErr) { }
       return { url: uploadRes.secure_url, publicId: uploadRes.public_id };
     } catch (err) {
       console.warn('Cloudinary upload error, falling back to local file link:', err.message);
@@ -752,9 +752,9 @@ const handleParticipantRegistration = async (req, res) => {
     const phone = sanitizeText(req.body.phone, 25);
 
     if (!fullName || !registrationNumber || !branch || !role || !acts || !phone) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Please provide all required fields: Name, Registration Number, Branch, Role, Acts, and WhatsApp Number.' 
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide all required fields: Name, Registration Number, Branch, Role, Acts, and WhatsApp Number.'
       });
     }
 
@@ -969,7 +969,7 @@ app.post('/api/hype-cheers', writeLimiter, async (req, res) => {
         });
         const saved = await cheerDoc.save();
         newCheer._id = saved._id.toString();
-      } catch (e) {}
+      } catch (e) { }
     }
 
     inMemoryStore.hypeCheers.unshift(newCheer);
@@ -988,7 +988,7 @@ app.post('/api/hype-cheers/:id/like', voteLimiter, async (req, res) => {
       if (updated) {
         return res.json({ success: true, likes: updated.likes });
       }
-    } catch (e) {}
+    } catch (e) { }
   }
   const item = inMemoryStore.hypeCheers.find(h => h._id === id);
   if (item) {
@@ -1007,7 +1007,7 @@ app.delete('/api/admin/hype-cheers/:id', verifyAdmin, async (req, res) => {
     if (isMongoConnected && mongoose.Types.ObjectId.isValid(id)) {
       try {
         await HypeCheer.findByIdAndDelete(id);
-      } catch (err) {}
+      } catch (err) { }
     }
     inMemoryStore.hypeCheers = (inMemoryStore.hypeCheers || []).filter(h => h._id !== id);
     res.json({ success: true, message: 'Shoutout deleted successfully' });
@@ -1025,7 +1025,7 @@ app.delete('/api/admin/shoutouts/:id', verifyAdmin, async (req, res) => {
     if (isMongoConnected && mongoose.Types.ObjectId.isValid(id)) {
       try {
         await HypeCheer.findByIdAndDelete(id);
-      } catch (err) {}
+      } catch (err) { }
     }
     inMemoryStore.hypeCheers = (inMemoryStore.hypeCheers || []).filter(h => h._id !== id);
     res.json({ success: true, message: 'Shoutout deleted successfully' });
@@ -1071,7 +1071,7 @@ app.post('/api/admin/login', adminLoginLimiter, (req, res) => {
       const token = jwt.sign(
         { username: configuredUsername, role: 'admin' },
         JWT_SECRET,
-        { expiresIn: '24h', algorithm: 'HS256' }
+        { expiresIn: '30m', algorithm: 'HS256' }
       );
       return res.json({
         success: true,
@@ -1588,7 +1588,7 @@ app.use((err, req, res, next) => {
 const clientDistPath = path.join(__dirname, '../client/dist');
 if (fs.existsSync(clientDistPath)) {
   app.use(express.static(clientDistPath));
-  
+
   // Single Page Application (SPA) fallback for non-API routes
   app.get('*', (req, res, next) => {
     if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) {
