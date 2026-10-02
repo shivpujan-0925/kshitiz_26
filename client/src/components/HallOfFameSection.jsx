@@ -17,12 +17,12 @@ const HallOfFameSection = ({ awards }) => {
   const mrDefaultCard = '/mr_fresher_card.jpg';
   const mrsDefaultCard = '/miss_fresher_card.jpg';
 
-  const mrDisplayImage = mr?.imageUrl && !mr.imageUrl.includes('unsplash.com') 
-    ? mr.imageUrl 
+  const mrDisplayImage = mr?.imageUrl && !mr.imageUrl.includes('unsplash.com')
+    ? mr.imageUrl
     : mrDefaultCard;
 
-  const mrsDisplayImage = mrs?.imageUrl && !mrs.imageUrl.includes('unsplash.com') 
-    ? mrs.imageUrl 
+  const mrsDisplayImage = mrs?.imageUrl && !mrs.imageUrl.includes('unsplash.com')
+    ? mrs.imageUrl
     : mrsDefaultCard;
 
   const handleCheerMr = async () => {
@@ -43,7 +43,7 @@ const HallOfFameSection = ({ awards }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: 'mrFresher' })
       });
-    } catch (e) {}
+    } catch (e) { }
   };
 
   const handleCheerMrs = async () => {
@@ -64,12 +64,12 @@ const HallOfFameSection = ({ awards }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: 'mrsFresher' })
       });
-    } catch (e) {}
+    } catch (e) { }
   };
 
   return (
     <section id="hall-of-fame" className="py-20 sm:py-28 px-4 sm:px-6 max-w-6xl mx-auto relative z-10">
-      
+
       {/* Title */}
       <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold tracking-widest uppercase mb-4 shadow-sm">
@@ -77,7 +77,7 @@ const HallOfFameSection = ({ awards }) => {
           The Royal Crowning Ceremony
         </div>
         <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-white font-heading tracking-tight">
-          Mr. & Miss Kshitiz 2025
+          Mr. & Miss Fresher 2025
         </h2>
         <p className="text-slate-400 text-sm sm:text-base md:text-lg mt-3">
           Recognizing the icons of charm, intellect, stage presence, and celestial poise of Batch 2025–2029.
@@ -88,11 +88,10 @@ const HallOfFameSection = ({ awards }) => {
           <div className="inline-flex flex-wrap sm:flex-nowrap justify-center gap-1 p-1 sm:p-1.5 rounded-2xl glass-panel border border-white/10 max-w-full">
             <button
               onClick={() => setActiveTab('royalty')}
-              className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                activeTab === 'royalty'
-                  ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-black shadow-md'
-                  : 'text-slate-400 hover:text-white'
-              }`}
+              className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${activeTab === 'royalty'
+                ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-black shadow-md'
+                : 'text-slate-400 hover:text-white'
+                }`}
             >
               <Crown className="w-4 h-4" />
               <span>Royalty Candidates</span>
@@ -100,11 +99,10 @@ const HallOfFameSection = ({ awards }) => {
 
             <button
               onClick={() => setActiveTab('criteria')}
-              className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                activeTab === 'criteria'
-                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-white'
-              }`}
+              className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${activeTab === 'criteria'
+                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md'
+                : 'text-slate-400 hover:text-white'
+                }`}
             >
               <Award className="w-4 h-4" />
               <span>Judging Rounds & Criteria</span>
@@ -115,11 +113,11 @@ const HallOfFameSection = ({ awards }) => {
 
       {activeTab === 'royalty' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 max-w-4xl mx-auto">
-          
-          {/* Mr. Kshitiz Celestial Card */}
+
+          {/* Mr. Fresher Celestial Card */}
           <div className="group relative rounded-3xl p-1 bg-gradient-to-b from-amber-500/60 via-purple-500/20 to-transparent transition-all duration-500 hover:scale-[1.02] shadow-2xl">
             <div className="glass-panel rounded-[22px] p-6 sm:p-8 flex flex-col items-center text-center h-full relative overflow-hidden">
-              
+
               {/* Background Glow */}
               <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-56 h-56 bg-amber-500/20 rounded-full blur-3xl pointer-events-none" />
 
@@ -127,7 +125,7 @@ const HallOfFameSection = ({ awards }) => {
               <div className="relative mb-6 w-full max-w-[280px] aspect-[3/4] rounded-2xl overflow-hidden border-2 border-amber-500/40 shadow-2xl shadow-amber-950/60 group-hover:border-amber-400 transition-colors">
                 <img
                   src={mrDisplayImage}
-                  alt="Mr. Kshitiz Card"
+                  alt="Mr. Fresher Card"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute top-3 right-3 p-2.5 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 shadow-xl font-bold">
@@ -136,7 +134,7 @@ const HallOfFameSection = ({ awards }) => {
               </div>
 
               <span className="text-xs font-black tracking-widest uppercase text-amber-400 bg-amber-950/70 px-4 py-1.5 rounded-full border border-amber-500/40 mb-2 shadow-sm">
-                {mr?.titleBadge || 'Mr. Kshitiz 2025'}
+                {mr?.titleBadge && !/kshitiz/i.test(mr.titleBadge) ? mr.titleBadge : 'Mr. Fresher 2025'}
               </span>
 
               <h3 className="text-2xl sm:text-3xl font-black text-white mt-1 tracking-tight">
@@ -174,11 +172,10 @@ const HallOfFameSection = ({ awards }) => {
                 <button
                   onClick={handleCheerMr}
                   disabled={cheeredMr}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                    cheeredMr
-                      ? 'bg-amber-500/30 text-amber-300 border border-amber-500/50'
-                      : 'bg-amber-500/15 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30'
-                  }`}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${cheeredMr
+                    ? 'bg-amber-500/30 text-amber-300 border border-amber-500/50'
+                    : 'bg-amber-500/15 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30'
+                    }`}
                 >
                   <Heart className={`w-3.5 h-3.5 ${cheeredMr ? 'fill-amber-400 text-amber-400' : ''}`} />
                   <span>{cheeredMr ? 'Cheered!' : 'Cheer Him'}</span>
@@ -188,10 +185,10 @@ const HallOfFameSection = ({ awards }) => {
             </div>
           </div>
 
-          {/* Miss Kshitiz Celestial Card */}
+          {/* Miss. Fresher Celestial Card */}
           <div className="group relative rounded-3xl p-1 bg-gradient-to-b from-pink-500/60 via-purple-500/20 to-transparent transition-all duration-500 hover:scale-[1.02] shadow-2xl">
             <div className="glass-panel rounded-[22px] p-6 sm:p-8 flex flex-col items-center text-center h-full relative overflow-hidden">
-              
+
               {/* Background Glow */}
               <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-56 h-56 bg-pink-500/20 rounded-full blur-3xl pointer-events-none" />
 
@@ -199,7 +196,7 @@ const HallOfFameSection = ({ awards }) => {
               <div className="relative mb-6 w-full max-w-[280px] aspect-[3/4] rounded-2xl overflow-hidden border-2 border-pink-500/40 shadow-2xl shadow-pink-950/60 group-hover:border-pink-400 transition-colors">
                 <img
                   src={mrsDisplayImage}
-                  alt="Miss Kshitiz Card"
+                  alt="Miss. Fresher Card"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute top-3 right-3 p-2.5 rounded-full bg-gradient-to-br from-pink-400 to-rose-600 text-white shadow-xl font-bold">
@@ -208,7 +205,7 @@ const HallOfFameSection = ({ awards }) => {
               </div>
 
               <span className="text-xs font-black tracking-widest uppercase text-pink-400 bg-pink-950/70 px-4 py-1.5 rounded-full border border-pink-500/40 mb-2 shadow-sm">
-                {mrs?.titleBadge || 'Miss Kshitiz 2025'}
+                {mrs?.titleBadge && !/kshitiz/i.test(mrs.titleBadge) ? mrs.titleBadge : 'Miss. Fresher 2025'}
               </span>
 
               <h3 className="text-2xl sm:text-3xl font-black text-white mt-1 tracking-tight">
@@ -246,11 +243,10 @@ const HallOfFameSection = ({ awards }) => {
                 <button
                   onClick={handleCheerMrs}
                   disabled={cheeredMrs}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                    cheeredMrs
-                      ? 'bg-pink-500/30 text-pink-300 border border-pink-500/50'
-                      : 'bg-pink-500/15 hover:bg-pink-500/30 text-pink-300 border border-pink-500/30'
-                  }`}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${cheeredMrs
+                    ? 'bg-pink-500/30 text-pink-300 border border-pink-500/50'
+                    : 'bg-pink-500/15 hover:bg-pink-500/30 text-pink-300 border border-pink-500/30'
+                    }`}
                 >
                   <Heart className={`w-3.5 h-3.5 ${cheeredMrs ? 'fill-pink-400 text-pink-400' : ''}`} />
                   <span>{cheeredMrs ? 'Cheered!' : 'Cheer Her'}</span>
@@ -266,7 +262,7 @@ const HallOfFameSection = ({ awards }) => {
       {/* Criteria Tab */}
       {activeTab === 'criteria' && (
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in text-left">
-          
+
           <div className="glass-card p-6 rounded-3xl border border-white/10 flex flex-col justify-between">
             <div>
               <span className="text-2xl font-black font-mono text-cyan-400 block mb-2">01</span>

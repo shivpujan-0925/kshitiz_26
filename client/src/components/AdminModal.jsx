@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  X, 
-  Users, 
-  Image as ImageIcon, 
-  Award, 
-  Radio, 
-  LogOut, 
-  Trash2, 
-  Upload, 
-  Download, 
+import {
+  X,
+  Users,
+  Image as ImageIcon,
+  Award,
+  Radio,
+  LogOut,
+  Trash2,
+  Upload,
+  Download,
   Sparkles,
   Link as LinkIcon,
   ShieldCheck,
@@ -48,7 +48,7 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
 
   // Form states with local drive file support
   const [newAnnouncement, setNewAnnouncement] = useState({ title: '', content: '', tag: 'Urgent' });
-  
+
   // Schedule state
   const [editingScheduleId, setEditingScheduleId] = useState(null);
   const [scheduleForm, setScheduleForm] = useState({
@@ -224,19 +224,19 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
 
   // Filter participants by branch, role, and search query
   const filteredParticipants = participants.filter((p) => {
-    const matchesBranch = filterBranch === 'All' || 
-      p.branch === filterBranch || 
+    const matchesBranch = filterBranch === 'All' ||
+      p.branch === filterBranch ||
       (p.branch && filterBranch && p.branch.toLowerCase() === filterBranch.toLowerCase());
     const matchesRole = filterRole === 'All' || (
-      filterRole === 'Performer' 
+      filterRole === 'Performer'
         ? (p.role || '').toLowerCase().includes('participant') || (p.role || '').toLowerCase().includes('performer')
-        : filterRole === 'Volunteer' 
-        ? (p.role || '').toLowerCase().includes('volunteer')
-        : filterRole === 'Attendee' 
-        ? (p.role || '').toLowerCase().includes('attendee') || (p.role || '').toLowerCase().includes('crowd') || (p.role || '').toLowerCase().includes('general')
-        : p.role === filterRole
+        : filterRole === 'Volunteer'
+          ? (p.role || '').toLowerCase().includes('volunteer')
+          : filterRole === 'Attendee'
+            ? (p.role || '').toLowerCase().includes('attendee') || (p.role || '').toLowerCase().includes('crowd') || (p.role || '').toLowerCase().includes('general')
+            : p.role === filterRole
     );
-    const matchesSearch = !searchQuery || 
+    const matchesSearch = !searchQuery ||
       (p.fullName && p.fullName.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (p.registrationNumber && p.registrationNumber.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (p.acts && p.acts.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -336,7 +336,7 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
     }
 
     try {
-      const url = editingScheduleId 
+      const url = editingScheduleId
         ? apiUrl(`/api/admin/schedule/${editingScheduleId}`)
         : apiUrl('/api/admin/schedule');
       const method = editingScheduleId ? 'PUT' : 'POST';
@@ -646,7 +646,7 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/85 backdrop-blur-2xl animate-fade-in">
       <div className="relative w-full max-w-6xl h-[92vh] max-h-[900px] glass-panel rounded-3xl border border-white/15 shadow-2xl flex flex-col overflow-hidden text-slate-200">
-        
+
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-white/10 flex items-center justify-between bg-[#070b20]">
           <div className="flex items-center gap-3">
@@ -695,9 +695,8 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
               <p className="text-xs text-slate-400 mb-6">Enter authorized committee credentials to access event management</p>
 
               {statusMsg.text && (
-                <div className={`p-3 rounded-xl mb-4 text-xs font-semibold ${
-                  statusMsg.type === 'success' ? 'bg-emerald-950/60 text-emerald-300' : 'bg-red-950/60 text-red-300'
-                }`}>
+                <div className={`p-3 rounded-xl mb-4 text-xs font-semibold ${statusMsg.type === 'success' ? 'bg-emerald-950/60 text-emerald-300' : 'bg-red-950/60 text-red-300'
+                  }`}>
                   {statusMsg.text}
                 </div>
               )}
@@ -738,7 +737,7 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
         ) : (
           /* Authenticated Responsive Dashboard */
           <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-            
+
             {/* Sidebar Navigation */}
             <div className="w-full md:w-60 lg:w-64 border-b md:border-b-0 md:border-r border-white/10 p-2 sm:p-3 flex md:flex-col gap-1.5 overflow-x-auto bg-[#070b1e] flex-shrink-0">
               {[
@@ -757,11 +756,10 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center justify-between p-2.5 sm:p-3 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
-                      isActive
+                    className={`flex items-center justify-between p-2.5 sm:p-3 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${isActive
                         ? 'bg-purple-600/30 text-white border border-purple-500/40 shadow-md'
                         : 'text-slate-400 hover:text-white hover:bg-white/5'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-2">
                       <Icon className="w-4 h-4 flex-shrink-0" />
@@ -779,21 +777,20 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
 
             {/* Content Area */}
             <div className="flex-1 p-3 sm:p-5 md:p-6 overflow-y-auto bg-[#030614]">
-              
+
               {/* TAB 1: PARTICIPANTS */}
               {activeTab === 'participants' && (
                 <div className="space-y-5">
-                  
+
                   {/* Stats Bar (Clickable quick role filters) */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     <button
                       type="button"
                       onClick={() => setFilterRole('All')}
-                      className={`text-left p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer ${
-                        filterRole === 'All' 
-                          ? 'border-cyan-400/80 bg-cyan-950/40 shadow-lg shadow-cyan-950/50 ring-1 ring-cyan-400/40' 
+                      className={`text-left p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer ${filterRole === 'All'
+                          ? 'border-cyan-400/80 bg-cyan-950/40 shadow-lg shadow-cyan-950/50 ring-1 ring-cyan-400/40'
                           : 'glass-card border-white/5 hover:border-white/20'
-                      }`}
+                        }`}
                     >
                       <span className="text-[11px] text-slate-400 uppercase font-bold flex items-center justify-between">
                         <span>Total Registrations</span>
@@ -805,11 +802,10 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
                     <button
                       type="button"
                       onClick={() => setFilterRole('Performer')}
-                      className={`text-left p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer ${
-                        filterRole === 'Performer' 
-                          ? 'border-purple-400/80 bg-purple-950/40 shadow-lg shadow-purple-950/50 ring-1 ring-purple-400/40' 
+                      className={`text-left p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer ${filterRole === 'Performer'
+                          ? 'border-purple-400/80 bg-purple-950/40 shadow-lg shadow-purple-950/50 ring-1 ring-purple-400/40'
                           : 'glass-card border-white/5 hover:border-white/20'
-                      }`}
+                        }`}
                     >
                       <span className="text-[11px] text-purple-300 uppercase font-bold flex items-center justify-between">
                         <span>Performers / Acts</span>
@@ -823,11 +819,10 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
                     <button
                       type="button"
                       onClick={() => setFilterRole('Volunteer')}
-                      className={`text-left p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer ${
-                        filterRole === 'Volunteer' 
-                          ? 'border-amber-400/80 bg-amber-950/40 shadow-lg shadow-amber-950/50 ring-1 ring-amber-400/40' 
+                      className={`text-left p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer ${filterRole === 'Volunteer'
+                          ? 'border-amber-400/80 bg-amber-950/40 shadow-lg shadow-amber-950/50 ring-1 ring-amber-400/40'
                           : 'glass-card border-white/5 hover:border-white/20'
-                      }`}
+                        }`}
                     >
                       <span className="text-[11px] text-amber-300 uppercase font-bold flex items-center justify-between">
                         <span>Volunteers</span>
@@ -841,11 +836,10 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
                     <button
                       type="button"
                       onClick={() => setFilterRole('Attendee')}
-                      className={`text-left p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer ${
-                        filterRole === 'Attendee' 
-                          ? 'border-cyan-400/80 bg-cyan-950/40 shadow-lg shadow-cyan-950/50 ring-1 ring-cyan-400/40' 
+                      className={`text-left p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer ${filterRole === 'Attendee'
+                          ? 'border-cyan-400/80 bg-cyan-950/40 shadow-lg shadow-cyan-950/50 ring-1 ring-cyan-400/40'
                           : 'glass-card border-white/5 hover:border-white/20'
-                      }`}
+                        }`}
                     >
                       <span className="text-[11px] text-cyan-300 uppercase font-bold flex items-center justify-between">
                         <span>General Attendees</span>
@@ -916,7 +910,7 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
                       onClick={exportToCSV}
                       className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 text-xs font-bold hover:bg-emerald-600/50 transition-all cursor-pointer whitespace-nowrap"
                     >
-                      <Download className="w-4 h-4" /> 
+                      <Download className="w-4 h-4" />
                       Export CSV ({filteredParticipants.length})
                     </button>
                   </div>
@@ -949,13 +943,12 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
                               <td className="p-3.5 font-mono text-cyan-300 font-semibold">{p.registrationNumber}</td>
                               <td className="p-3.5 max-w-[130px] truncate">{p.branch}</td>
                               <td className="p-3.5">
-                                <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
-                                  (p.role || '').includes('Performer') || (p.role || '').includes('Participant')
+                                <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${(p.role || '').includes('Performer') || (p.role || '').includes('Participant')
                                     ? 'bg-purple-500/20 text-purple-300 border-purple-500/30'
                                     : (p.role || '').includes('Volunteer')
-                                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/30'
-                                    : 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30'
-                                }`}>
+                                      ? 'bg-amber-500/20 text-amber-300 border-amber-500/30'
+                                      : 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30'
+                                  }`}>
                                   {p.role || 'Participant'}
                                 </span>
                               </td>
@@ -1279,9 +1272,8 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
                       schedule.map((item, idx) => (
                         <div
                           key={item._id || idx}
-                          className={`glass-card p-4 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                            item.highlight ? 'border-pink-500/30 bg-pink-950/10' : 'border-white/10 hover:border-white/20'
-                          }`}
+                          className={`glass-card p-4 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${item.highlight ? 'border-pink-500/30 bg-pink-950/10' : 'border-white/10 hover:border-white/20'
+                            }`}
                         >
                           <div className="flex items-start sm:items-center gap-3">
                             <div className="flex flex-col items-center justify-center w-20 py-2 rounded-xl bg-white/5 border border-white/10 flex-shrink-0">
@@ -1529,14 +1521,14 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
                 <div className="space-y-6 max-w-3xl">
                   <div className="glass-panel p-5 sm:p-6 rounded-3xl border border-white/10 shadow-2xl">
                     <h4 className="font-bold text-white text-lg mb-4 flex items-center gap-2">
-                      <Award className="w-5 h-5 text-amber-400" /> Mr. & Miss Kshitiz Crowning Manager
+                      <Award className="w-5 h-5 text-amber-400" /> Mr. & Miss Fresher Crowning Manager
                     </h4>
 
                     <form onSubmit={handleUpdateAwards} className="space-y-6">
-                      
+
                       {/* Mr. Fresher */}
                       <div className="p-4 sm:p-5 rounded-2xl bg-amber-950/20 border border-amber-500/30 space-y-3.5">
-                        <span className="text-xs font-bold uppercase text-amber-400 tracking-wider">Mr. Kshitiz 2025 Profile</span>
+                        <span className="text-xs font-bold uppercase text-amber-400 tracking-wider">Mr. Fresher 2025 Profile</span>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                           <input
                             type="text"
@@ -1596,7 +1588,7 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
 
                       {/* Miss Fresher */}
                       <div className="p-4 sm:p-5 rounded-2xl bg-pink-950/20 border border-pink-500/30 space-y-3.5">
-                        <span className="text-xs font-bold uppercase text-pink-400 tracking-wider">Miss Kshitiz 2025 Profile</span>
+                        <span className="text-xs font-bold uppercase text-pink-400 tracking-wider">Miss. Fresher 2025 Profile</span>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                           <input
                             type="text"
@@ -1791,11 +1783,10 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
         {/* In-app Toast Notification Banner */}
         {toast.show && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[110] pointer-events-none">
-            <div className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold shadow-2xl border backdrop-blur-xl ${
-              toast.type === 'success' 
-                ? 'bg-emerald-950/90 text-emerald-300 border-emerald-500/50 shadow-emerald-950/60' 
+            <div className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold shadow-2xl border backdrop-blur-xl ${toast.type === 'success'
+                ? 'bg-emerald-950/90 text-emerald-300 border-emerald-500/50 shadow-emerald-950/60'
                 : 'bg-red-950/90 text-red-300 border-red-500/50 shadow-red-950/60'
-            }`}>
+              }`}>
               {toast.type === 'success' ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <AlertCircle className="w-4 h-4 text-red-400" />}
               <span>{toast.text}</span>
             </div>

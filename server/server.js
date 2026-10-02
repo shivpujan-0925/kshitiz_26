@@ -256,7 +256,7 @@ const inMemoryStore = {
       registrationNumber: 'GCE-2025-XX',
       branch: 'Grand Finale Stage Reveal',
       imageUrl: '/mr_fresher_card.jpg',
-      titleBadge: 'Mr. Kshitiz 2025',
+      titleBadge: 'Mr. Fresher 2025',
       announced: false,
       cheersCount: 142
     },
@@ -265,7 +265,7 @@ const inMemoryStore = {
       registrationNumber: 'GCE-2025-YY',
       branch: 'Grand Finale Stage Reveal',
       imageUrl: '/miss_fresher_card.jpg',
-      titleBadge: 'Miss Kshitiz 2025',
+      titleBadge: 'Miss. Fresher 2025',
       announced: false,
       cheersCount: 168
     }
@@ -573,7 +573,7 @@ const SettingsSchema = new mongoose.Schema({
     registrationNumber: { type: String, default: '' },
     branch: { type: String, default: '' },
     imageUrl: { type: String, default: '' },
-    titleBadge: { type: String, default: 'Mr. Kshitiz 2025' },
+    titleBadge: { type: String, default: 'Mr. Fresher 2025' },
     announced: { type: Boolean, default: false }
   },
   mrsFresher: {
@@ -581,7 +581,7 @@ const SettingsSchema = new mongoose.Schema({
     registrationNumber: { type: String, default: '' },
     branch: { type: String, default: '' },
     imageUrl: { type: String, default: '' },
-    titleBadge: { type: String, default: 'Miss Kshitiz 2025' },
+    titleBadge: { type: String, default: 'Miss. Fresher 2025' },
     announced: { type: Boolean, default: false }
   }
 });
@@ -686,6 +686,19 @@ app.get('/api/settings', async (req, res) => {
           mrFresher: inMemoryStore.awards.mrFresher,
           mrsFresher: inMemoryStore.awards.mrsFresher
         });
+      } else {
+        let modified = false;
+        if (conf.mrFresher && /kshitiz/i.test(conf.mrFresher.titleBadge || '')) {
+          conf.mrFresher.titleBadge = 'Mr. Fresher';
+          modified = true;
+        }
+        if (conf.mrsFresher && /kshitiz/i.test(conf.mrsFresher.titleBadge || '')) {
+          conf.mrsFresher.titleBadge = 'Miss. Fresher';
+          modified = true;
+        }
+        if (modified) {
+          await conf.save();
+        }
       }
       return res.json({ success: true, data: conf });
     }
@@ -1507,7 +1520,7 @@ app.post('/api/admin/awards', verifyAdmin, upload.fields([{ name: 'mrImage' }, {
         registrationNumber: sanitizeText(mrRegNo, 40) || inMemoryStore.awards.mrFresher.registrationNumber,
         branch: sanitizeText(mrBranch, 80) || inMemoryStore.awards.mrFresher.branch,
         imageUrl: mrImageUrl || inMemoryStore.awards.mrFresher.imageUrl,
-        titleBadge: 'Mr. Kshitiz 2025',
+        titleBadge: 'Mr. Fresher 2025',
         announced: mrAnnounced === 'true' || mrAnnounced === true
       },
       mrsFresher: {
@@ -1515,7 +1528,7 @@ app.post('/api/admin/awards', verifyAdmin, upload.fields([{ name: 'mrImage' }, {
         registrationNumber: sanitizeText(mrsRegNo, 40) || inMemoryStore.awards.mrsFresher.registrationNumber,
         branch: sanitizeText(mrsBranch, 80) || inMemoryStore.awards.mrsFresher.branch,
         imageUrl: mrsImageUrl || inMemoryStore.awards.mrsFresher.imageUrl,
-        titleBadge: 'Miss Kshitiz 2025',
+        titleBadge: 'Miss. Fresher 2025',
         announced: mrsAnnounced === 'true' || mrsAnnounced === true
       }
     };
