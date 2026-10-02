@@ -1,16 +1,16 @@
 import React, { useState, useRef } from 'react';
-import { 
-  Sparkles, 
-  RotateCw, 
-  Download, 
-  CheckCircle2, 
-  ShieldCheck, 
-  QrCode, 
-  User, 
-  GraduationCap, 
-  Flame, 
-  Calendar, 
-  MapPin, 
+import {
+  Sparkles,
+  RotateCw,
+  Download,
+  CheckCircle2,
+  ShieldCheck,
+  QrCode,
+  User,
+  GraduationCap,
+  Flame,
+  Calendar,
+  MapPin,
   Share2,
   Check,
   FileImage
@@ -49,11 +49,11 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
     const hashStr = passId + name;
     for (let r = 0; r < 7; r++) {
       for (let c = 0; c < 7; c++) {
-        const isCorner = 
-          (r < 2 && c < 2) || 
-          (r < 2 && c > 4) || 
+        const isCorner =
+          (r < 2 && c < 2) ||
+          (r < 2 && c > 4) ||
           (r > 4 && c < 2);
-        
+
         let filled = false;
         if (isCorner) {
           filled = true;
@@ -232,7 +232,7 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
           num: '1',
           color: '#00F5D4',
           title: 'REPORTING TIME & ENTRY',
-          body: 'Gates open at 04:30 PM. Conclave inauguration strictly at 05:15 PM at Academic campus, GCE. Late entries after 06:00 PM will require security desk clearance.'
+          body: 'Gates open at 01:30 PM. Conclave inauguration strictly at 02:00 PM at Academic campus, GCE. Late entries after 03:00 PM will require security desk clearance.'
         },
         {
           num: '2',
@@ -278,7 +278,7 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
         // Rule Body (Wrap text)
         ctx.font = '500 13px "Plus Jakarta Sans", sans-serif';
         ctx.fillStyle = '#cbd5e1';
-        
+
         const words = rule.body.split(' ');
         let line = '';
         let lineY = ruleY + 24;
@@ -436,7 +436,7 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
 
       ctx.font = '500 15px "Plus Jakarta Sans", sans-serif';
       ctx.fillStyle = '#cbd5e1';
-      ctx.fillText('📅 8 October 2026 • 05:00 PM Onwards', 55, 930);
+      ctx.fillText('📅 8 October 2026 • 02:00 PM Onwards', 55, 930);
       ctx.fillText('📍 Academic campus, GCE', 55, 955);
 
       // Draw Vector QR Code Box
@@ -571,7 +571,7 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
       const { dataUrl, blob } = await generatePassImageData('image/jpeg');
 
       const shareTitle = `Kshitiz '25 VIP Entry Pass - ${name}`;
-      const shareText = `🎟️ Official Entry Pass for Kshitiz '25\nAttendee: ${name}\nRoll: ${roll}\nVerification ID: ${passId}\nVenue: Academic Campus, GCE\nDate: 8 Oct 2026 • 05:00 PM`;
+      const shareText = `🎟️ Official Entry Pass for Kshitiz '25\nAttendee: ${name}\nRoll: ${roll}\nVerification ID: ${passId}\nVenue: Academic Campus, GCE\nDate: 8 Oct 2026 • 02:00 PM`;
 
       let sharedViaApi = false;
 
@@ -646,15 +646,15 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
 
   return (
     <div className="flex flex-col items-center select-none w-full">
-      
+
       {/* Exact-Position Card Wrapper (Shows ONLY ONE side at a time, anchored at the exact same place) */}
-      <div 
+      <div
         className="w-full max-w-sm sm:max-w-md cursor-pointer group my-1 transition-transform duration-300 active:scale-[0.99]"
         onClick={() => setIsFlipped(!isFlipped)}
       >
         {!isFlipped ? (
           /* ================= FRONT SIDE ================= */
-          <div 
+          <div
             ref={frontCardRef}
             className="w-full rounded-3xl p-5 sm:p-7 bg-gradient-to-br from-[#0c0e29] via-[#090b20] to-[#040614] border-2 border-purple-500/40 shadow-2xl relative overflow-hidden transition-all duration-300 hover:border-purple-400/60 animate-fade-in"
           >
@@ -749,7 +749,7 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
                 <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider block">Verification ID</span>
                 <span className="text-[10px] font-mono font-bold text-purple-300 tracking-wider">{passId}</span>
                 <div className="mt-1 flex items-center gap-1.5 text-[9px] text-slate-400">
-                  <Calendar className="w-3 h-3 text-cyan-400" /> 8 Oct 2026 • 05:00 PM
+                  <Calendar className="w-3 h-3 text-cyan-400" /> 8 Oct 2026 • 02:00 PM
                 </div>
               </div>
 
@@ -772,7 +772,7 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
           </div>
         ) : (
           /* ================= BACK SIDE (Rendered in the exact same place) ================= */
-          <div 
+          <div
             ref={backCardRef}
             className="w-full rounded-3xl p-5 sm:p-7 bg-gradient-to-br from-[#040614] via-[#090b20] to-[#0c0e29] border-2 border-cyan-500/40 shadow-2xl relative overflow-hidden transition-all duration-300 hover:border-cyan-400/60 flex flex-col justify-between text-left animate-fade-in"
           >
@@ -792,7 +792,7 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
               <div className="space-y-2.5 text-[11px] text-slate-300">
                 <div className="flex items-start gap-2">
                   <span className="w-4 h-4 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-bold text-[9px] flex-shrink-0 mt-0.5">1</span>
-                  <span><strong>Reporting Time:</strong> Gates open at 04:30 PM. Conclave inauguration strictly at 05:15 PM at Academic campus, GCE.</span>
+                  <span><strong>Reporting Time:</strong> Gates open at 01:30 PM. Conclave inauguration strictly at 02:00 PM at Academic campus, GCE.</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <span className="w-4 h-4 rounded-full bg-purple-500/20 text-purple-300 flex items-center justify-center font-bold text-[9px] flex-shrink-0 mt-0.5">2</span>
@@ -909,7 +909,7 @@ const DigitalPassCard = ({ participant, isPreview = false }) => {
               </p>
             </div>
             <a
-              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`🎟️ Official Entry Pass for Kshitiz '25\nAttendee: ${name}\nRoll: ${roll}\nVerification ID: ${passId}\nVenue: Academic Campus, GCE\nDate: 8 Oct 2026 • 05:00 PM`)}`}
+              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`🎟️ Official Entry Pass for Kshitiz '25\nAttendee: ${name}\nRoll: ${roll}\nVerification ID: ${passId}\nVenue: Academic Campus, GCE\nDate: 8 Oct 2026 • 02:00 PM`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="px-2.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-[11px] inline-flex items-center gap-1.5 shadow-md transition-all flex-shrink-0"

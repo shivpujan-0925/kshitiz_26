@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Sparkles, 
-  Calendar, 
-  MapPin, 
-  ArrowRight, 
-  Trophy, 
-  Flame, 
-  Ticket, 
-  Clock, 
-  Users, 
-  Zap, 
+import {
+  Sparkles,
+  Calendar,
+  MapPin,
+  ArrowRight,
+  Trophy,
+  Flame,
+  Ticket,
+  Clock,
+  Users,
+  Zap,
   Heart,
   Volume2
 } from 'lucide-react';
@@ -27,7 +27,7 @@ const HeroSection = ({ settings, onRegisterClick, onLookupClick, posters }) => {
 
   const [floatingReactions, setFloatingReactions] = useState([]);
   const [reactionCounts, setReactionCounts] = useState({
-    '🔥': 148,
+    '🔥': 25,
     '💃': 92,
     '👑': 114,
     '🎸': 78,
@@ -94,7 +94,7 @@ const HeroSection = ({ settings, onRegisterClick, onLookupClick, posters }) => {
 
   return (
     <section id="hero" className="relative min-h-[90vh] sm:min-h-screen flex flex-col justify-center items-center text-center px-3 sm:px-6 pt-10 sm:pt-16 pb-36 sm:pb-36 overflow-hidden">
-      
+
       {/* Background radial spotlight */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] max-w-full h-[380px] bg-gradient-to-b from-purple-600/20 via-cyan-600/10 to-transparent rounded-full blur-[140px] pointer-events-none" />
 
@@ -119,7 +119,7 @@ const HeroSection = ({ settings, onRegisterClick, onLookupClick, posters }) => {
           </h1>
           <div className="absolute -top-4 -right-6 hidden sm:flex items-center gap-1 px-3 py-1 rounded-full bg-pink-500/20 border border-pink-500/40 text-pink-300 text-xs font-bold tracking-wider shadow-lg">
             <Zap className="w-3.5 h-3.5 fill-pink-400" />
-            <span>ANNUAL FRESHER</span>
+            <span>FRESHER PARTY</span>
           </div>
         </div>
 
@@ -139,8 +139,8 @@ const HeroSection = ({ settings, onRegisterClick, onLookupClick, posters }) => {
           { label: 'MINUTES', value: timeLeft.minutes },
           { label: 'SECONDS', value: timeLeft.seconds },
         ].map((unit, idx) => (
-          <div 
-            key={idx} 
+          <div
+            key={idx}
             className="glass-panel py-2.5 px-1 sm:py-4 sm:px-3 md:py-5 md:px-4 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/10 flex flex-col items-center justify-center relative overflow-hidden group hover:border-cyan-500/50 hover:shadow-cyan-500/20 shadow-lg transition-all"
           >
             <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -232,7 +232,7 @@ const HeroSection = ({ settings, onRegisterClick, onLookupClick, posters }) => {
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 mt-6 sm:mt-9 text-[11px] sm:text-xs md:text-sm text-slate-300 max-w-4xl w-full px-1">
         <div className="flex items-center justify-center gap-1.5 sm:gap-2 px-3 py-2.5 rounded-xl glass-card border border-white/5 shadow-md">
           <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-400 flex-shrink-0" />
-          <span className="truncate">8 Oct • 5 PM</span>
+          <span className="truncate">8 Oct • 2 PM</span>
         </div>
         <div className="flex items-center justify-center gap-1.5 sm:gap-2 px-3 py-2.5 rounded-xl glass-card border border-white/5 shadow-md">
           <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-400 flex-shrink-0" />
