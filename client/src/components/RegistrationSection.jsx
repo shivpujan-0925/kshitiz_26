@@ -47,7 +47,8 @@ const RegistrationSection = ({ onRegisterSuccess }) => {
     'Electronics & Communication Engineering',
     'Electrical & Electronics Engineering',
     'Mechanical Engineering',
-    'Civil Engineering'
+    'Civil Engineering',
+    'B.arch'
   ];
 
   const participantRoles = [

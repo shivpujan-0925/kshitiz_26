@@ -224,7 +224,9 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
 
   // Filter participants by branch, role, and search query
   const filteredParticipants = participants.filter((p) => {
-    const matchesBranch = filterBranch === 'All' || p.branch === filterBranch;
+    const matchesBranch = filterBranch === 'All' || 
+      p.branch === filterBranch || 
+      (p.branch && filterBranch && p.branch.toLowerCase() === filterBranch.toLowerCase());
     const matchesRole = filterRole === 'All' || (
       filterRole === 'Performer' 
         ? (p.role || '').toLowerCase().includes('participant') || (p.role || '').toLowerCase().includes('performer')
@@ -892,6 +894,7 @@ const AdminModal = ({ isOpen, onClose, onDataRefresh }) => {
                         <option value="Electrical & Electronics Engineering">EEE</option>
                         <option value="Mechanical Engineering">ME</option>
                         <option value="Civil Engineering">CE</option>
+                        <option value="B.arch">B.arch</option>
                       </select>
 
                       {(filterRole !== 'All' || filterBranch !== 'All' || searchQuery) && (

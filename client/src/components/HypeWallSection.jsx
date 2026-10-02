@@ -261,7 +261,7 @@ const HypeWallSection = () => {
                   onChange={(e) => setForm({ ...form, branch: e.target.value })}
                   className="w-full glass-input px-3 py-2.5 rounded-xl text-white text-xs bg-slate-900"
                 >
-                  {['CSE', 'ECE', 'EE', 'ME', 'Civil'].map(b => (
+                  {['CSE', 'ECE', 'EE', 'ME', 'Civil', 'B.arch'].map(b => (
                     <option key={b} value={b}>{b}</option>
                   ))}
                 </select>
